@@ -1,0 +1,27 @@
+-# call this with:
+  =@country = country; render partial: 'shared/modal_wrapper', locals: {the_form: 'countries/form', btn_label: 'Edit', target_id: "country_modal_#{country.id}", public_title: 'Edit Country'}
+-# activate with this
+  =link_to 'Add header image', '#', data: { toggle: 'modal', target: '#country_modal_1'}
+
+.modal.fade{id: target_id, tabindex: '-1', role: 'dialog', aria: {labelledby: 'myModalLabel', hidden: 'true'}}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %button{type: 'button', class: 'close', data: {dismiss: 'modal', hidden: 'true'}} &times;
+        %h2.modal-title#myModalLabel=public_title
+      .modal-body
+        =render partial: the_form
+      -#.modal-footer
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+
+%button.btn.btn-primary.btn-xs{data: {toggle: 'modal', target: '#' + target_id}}
+  =btn_label
+
+:javascript
+
+  $(document).on('ready page:load', function() {
+    var link = $('##{target_id} a').filter(function(index) { return $(this).text() === "cancel"; });
+    link.attr('data-dismiss', 'modal');
+    link.attr('href', '');
+  })

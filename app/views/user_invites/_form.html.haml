@@ -1,0 +1,16 @@
+.row
+  .col-md-8.col-md-offset-2
+    =form_for(@user_invite, html: {class: 'form-horizontal', role: 'form'}) do |f|
+      .well.well-sm
+        =render partial: '/layouts/error_messages', locals: {thing: @user_invite, message: nil}
+        .form-group
+          =f.label :first_name, class: 'control-label col-md-4'
+          .col-md-8
+            =f.text_field :first_name, class: 'form-control'
+        .form-group
+          =f.label :email, class: 'control-label col-md-4'
+          .col-md-8
+            =f.text_field :email, class: 'form-control'
+      =f.submit 'Save', class: 'btn btn-success'
+      or
+      =link_to 'cancel', user_invites_path

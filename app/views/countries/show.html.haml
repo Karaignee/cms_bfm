@@ -1,0 +1,28 @@
+.row
+  .col-md-12
+    .page-header
+      %h1
+        Country #
+        =@country.id
+.row
+  .col-md-12
+    %table.table.table-striped.table-bordered
+      %tr
+        %td.col-sm-4 Name
+        %td.col-sm-8=@country.name
+      %tr
+        %td.col-sm-4 In the eu
+        %td.col-sm-8=@country.in_the_eu
+      %tr
+        %td.col-sm-4 Running order
+        %td.col-sm-8=@country.running_order
+      %tr
+        %td.col-sm-4 Iso code
+        %td.col-sm-8=@country.iso_code
+      %tr
+        %td.col-sm-4 Country tld
+        %td.col-sm-8=@country.country_tld
+    %p
+      =link_to 'Back', countries_url
+      |
+      =link_to 'Edit', edit_country_url

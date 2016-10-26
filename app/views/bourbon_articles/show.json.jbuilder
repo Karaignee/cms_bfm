@@ -1,0 +1,1 @@
+json.extract! @bourbon_article, :id, :article_title, :contributor_id, :curator_id, :collaborator, :article_subtitle, :article_published_at, :image_id, :article_body, :tags, :visible, :created_at, :updated_at

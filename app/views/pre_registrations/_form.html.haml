@@ -1,0 +1,25 @@
+.row
+  .col-md-8.col-md-offset-2
+    =form_for(@pre_registration, html: {class: 'form-horizontal', role: 'form'}) do |f|
+      .well.well-sm
+        =render partial: '/layouts/error_messages', locals: {thing: @pre_registration, message: nil}
+        .form-group
+          =f.label :email, class: 'control-label col-md-4'
+          .col-md-8
+            =f.text_field :email, class: 'form-control'
+        .form-group
+          =f.label :user_agent, class: 'control-label col-md-4'
+          .col-md-8
+            =f.text_field :user_agent, class: 'form-control'
+        -unless f.object.id.nil?
+          .form-group
+            =f.label :ip_address, class: 'control-label col-md-4'
+            .col-md-8
+              =f.text_field :ip_address, class: 'form-control'
+          .form-group
+            =f.label :source, class: 'control-label col-md-4'
+            .col-md-8
+              =f.text_field :source, class: 'form-control'
+      =f.submit 'Save', class: 'btn btn-success'
+      or
+      =link_to 'cancel', pre_registrations_path

@@ -1,0 +1,50 @@
+.row
+  .col-md-8.col-md-offset-2
+    =form_for @user_group, html: {class: 'form-horizontal', role: 'form'} do |f|
+      =render partial: 'layouts/error_messages', locals: {thing: @user_group}
+    
+      .form-group
+        =f.label :name, class: 'control-label col-sm-4'
+        .col-md-8
+          =f.text_field :name, class: 'form-control'
+      .form-group
+        =f.label :description, class: 'control-label col-sm-4'
+        .col-md-8
+          =f.text_area :description, class: 'form-control'
+      .form-group
+        .col-md-8.col-md-offset-4
+          .checkbox
+            =f.check_box :limit_user_invites_for_this_group, onchange: 'showHideInviteLimit();'
+            =f.label :limit_user_invites_for_this_group
+      .form-group.showHide
+        =f.label :invites_limit_per_user, class: 'control-label col-sm-4'
+        .col-md-8
+          =f.number_field :invites_limit_per_user, class: 'form-control'
+      .form-group
+        .col-md-8.col-md-offset-4
+          .checkbox
+            =f.check_box :is_admin
+            =f.label :is_admin
+      .form-group
+        .col-md-8.col-md-offset-4
+          .checkbox
+            =f.check_box :is_curator
+            =f.label :is_curator
+      .form-group
+        .col-md-8.col-md-offset-4
+          .checkbox
+            =f.check_box :is_contributor
+            =f.label :is_contributor
+      .form-group
+        .col-md-8.col-md-offset-4
+          =f.submit 'Save', class: 'btn btn-success'
+
+:javascript
+
+  function showHideInviteLimit() {
+    if ($('#user_group_limit_user_invites_for_this_group').prop("checked") ) {
+      $('.showHide').removeClass('hide');
+    } else {
+      $('.showHide').addClass('hide');
+    }
+  }

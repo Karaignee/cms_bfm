@@ -1,0 +1,5 @@
+-# call this using
+  =render partial: 'shared/popover, locals: {label: 'click-me', destination: root_url, content: '<h1>hello</h1>', title: 'some title'}
+
+%a{type: 'button', class: 'btn-link', title: sanitize('<small>' + the_title + '</small>', tags: %w(small)), data: {container: 'body', toggle: 'popover', placement: 'bottom', content: sanitize("<img src='" + image_url + "' style='display: inline;float:left; padding: 5px;'/><div style='display: inline;'>Lorem ipsum dolor sit lorem ipsum sit dolor sitz bla bla bla.</div><hr/><div><small><a href='/'>Home</a></small></div>", tags: %w(div a img hr small), attributes: %w(src href style))}}
+  =the_title

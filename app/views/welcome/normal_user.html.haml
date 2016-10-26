@@ -1,0 +1,25 @@
+.row
+  .col-md-12
+    .page-header
+      %h1 Welcome#normal_user
+      %p.lead Content for normal users that are logged in
+.row
+  .col-sm-9
+    -if @bourbon_articles.size > 0
+      .jumbotron{style: (@bourbon_articles.first.image ? "background: #fff url('" + @bourbon_articles.first.image.try(:upload).try(:url).to_s + "') no-repeat center center !important;" : '') + (@bourbon_articles.first.try(:image).try(:make_text_bright) ? 'color: #eee;' : '')}
+        %h1=@bourbon_articles.first.article_title
+        %p.lead=@bourbon_articles.first.article_subtitle
+        %p=@bourbon_articles.first.article_body.split("\r")[0]
+        %p=link_to 'read more', @bourbon_articles.first
+
+      -if @bourbon_articles.size > 1
+        .row
+          -@bourbon_articles[1..-1].each do |bourbon_article|
+            .col-sm-4.text-center
+              -filename = bourbon_article.image.try(:upload).try(:url, :square).to_s
+              =image_tag(filename, class: 'img-circle', data: {src: 'holder.js/140x140'}, alt: bourbon_article.image.try(:alt_tag))
+              %h2=bourbon_article.article_title
+              %p=bourbon_article.article_subtitle
+              %p=link_to 'read more', bourbon_article, class: 'btn btn-default'
+  .col-sm-3
+    =render partial: 'profile_question_answers/ask'

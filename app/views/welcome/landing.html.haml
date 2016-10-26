@@ -1,0 +1,13 @@
+-#content_for :jumbotron do
+  .jumbotron.text-center
+    %h1 Landing Page
+    %h1 welcome
+
+.container
+  .row
+    .col-sm-8.col-sm-offset-2
+      %h1.page-header.text-center Welcome to Bourbon
+  .row
+    .col-sm-8.col-sm-offset-2
+      .row
+        =render partial: 'welcome/stories_grid', locals: {bourbon_articles: @bourbon_articles}

@@ -1,0 +1,19 @@
+<% if current_user.try(:contributor?) %>
+  <div class="row">
+    <div class="col-sm-12">
+      <p>
+        <%= link_to 'Write a new story', new_story_url, class: 'btn btn-success btn-sm' %>
+      </p>
+    </div>
+  </div>
+<% end %>
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm-9 col-centered-packery">
+      <div class="row">
+        <%= render :partial => "/welcome/stories_grid" %>
+      </div>
+    </div>
+  </div>
+</div>

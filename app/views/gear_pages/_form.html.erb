@@ -1,0 +1,136 @@
+<div class="container">
+  <div class="col-md-8 col-md-offset-2">
+    <h1>Create a new gear page</h1>
+
+    <%= form_for @gear_page, :html => {:multipart => true, :class => "form-horizontal"} do |f| %>
+        <% if @gear_page.errors.any? %>
+            <div id="error_explanation">
+              <h2><%= pluralize(@gear_page.errors.count, "error") %> prohibited this gear_page from being saved:</h2>
+
+              <ul>
+                <% @gear_page.errors.full_messages.each do |message| %>
+                    <li><%= message %></li>
+                <% end %>
+              </ul>
+            </div>
+        <% end %>
+
+
+
+        <div class='col-md-9'>
+          <div class='form-group'>
+            <%= f.label :gear_category, "Select the main category:", class: "col-md-4 control-label" %>
+            <div class="col-md-8">
+              <%#= f.collection_select :gear_category_id, @gear_categories, :id, :name, include_blank: true, class: 'form-control' %>
+
+              <%= f.text_field :gear_category_id, placeholder: 'main category' %>
+            </div>
+          </div>
+
+          <div class='form-group'>
+            <%= f.label :parent_id, "add additional categories", class: "col-md-4 control-label" %>
+            <div class="col-md-8">
+              <%= f.collection_select :parent_id, GearPage.order(:name), :id, :name, include_blank: true, class: 'form-control' %>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :name, class: "col-md-4 control-label" %>
+            <div class="col-md-8">
+              <%= f.text_field :name, placeholder: 'e.g. Fender Stratocaster', class: 'form-control' %>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :profile_image, class: "col-md-4 control-label" %>
+          <div class="col-md-8">
+            <%= f.file_field :profile_image %>
+            </div>
+          </div>
+
+
+          <div class="form-group">
+            <%= f.label :description, class: "col-md-4 control-label" %>
+            <div class="col-md-8">
+              <%= f.text_area :description, placeholder: 'Gear origins, description, facts etc', :size => "30x10", class: 'form-control' %>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="col-md-6">
+            <%= f.collection_select :genre_id, Genre.order(:name), :id, :name, include_blank: true, class: 'form-control', prompt: "Select associated genre" %>           
+            </div>
+            <div class="col-md-6">
+              <%= link_to 'Or create a music genre', new_genre_path(@genre), target: '_blank' %>
+            </div>
+          </div>
+
+
+          <div class="form-group">
+          <div class="col-md-6">
+            <%= f.collection_select :artist_id, Artist.order(:name), :id, :name, include_blank: true, multiple: true, class: 'form-control', prompt: "Select associated artist" %>  
+
+            </div>
+            <div class="col-md-6">
+              <%= link_to 'Or add new artist', new_artist_path(@artist), target: '_blank' %>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="col-md-6">
+            <%= f.collection_select :brand_id, Brand.order(:name), :id, :name, include_blank: true, class: 'form-control' %>
+            </div>
+            <div class="col-md-6">
+              <%= link_to 'add a new make/brand', new_brand_path(@brand), target: '_blank' %>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-sm-4 control-label">Where is it from?</label>
+
+            <div class="col-sm-4">
+              <select class="form-control">
+                <option value="">Select a country</option>
+                <option value=""></option>
+                <option value="276">Australia</option>
+                <option value="261">Canada</option>
+                <option value="263">China</option>
+                <option value="279">Denmark</option>
+                <option value="267">France</option>
+                <option value="265">Germany</option>
+                <option value="270">India</option>
+                <option value="269">Indonesia</option>
+                <option value="268">Italy</option>
+                <option value="262">Japan</option>
+                <option value="264">Korea</option>
+                <option value="260">Mexico</option>
+                <option value="277">Russia</option>
+                <option value="272">Spain</option>
+                <option value="274">Sweden</option>
+                <option value="275">Switzerland</option>
+                <option value="278">Taiwan</option>
+                <option value="266">United Kingdom</option>
+                <option value="259">United States</option>
+                <option value="271">Vietnam</option>
+                <option value="273">Other</option>
+              </select>
+            </div>
+          </div>
+
+
+          <div class="actions">
+
+            <%= f.submit class: 'btn btn-success' %>
+
+          </div>
+
+
+    <% end %>
+    </div>
+
+
+  </div>
+</div>
+
+
+

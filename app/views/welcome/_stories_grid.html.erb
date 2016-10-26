@@ -1,0 +1,67 @@
+
+<% col_counter = 0 %>
+<% row_counter = 0 %>
+<% col_width = 5 %>
+<% @bourbon_articles.each do |bourbon_article| %>
+  <% if col_counter >= 12 %>
+    <%= "</div><div class='row'>".html_safe %>
+    <% col_counter = 0 %>
+    <% row_counter += 1 %>
+    <% col_width = row_counter.even? ? 7 : 5 %>
+  <% else %>
+    <% col_width = (col_width == 7 ? 5 : 7) %>
+  <% end %>
+  <% col_counter += col_width %>
+<% end %>
+<!-- PACKERY ------------------------------------------------------------->
+
+<div id="packery-container">
+
+		
+	<% @bourbon_articles.each do |bourbon_article| %>
+		
+		<div class="packery-item bourbon-packery-card ">
+			<div class="packery-item-overlay">
+			    <div class="author-name">
+	                <%= link_to user_image(bourbon_article.contributor, size: 15, class: 'img-circle'), profile_url(bourbon_article.contributor.url_code) %>
+	                <%= link_to bourbon_article.contributor.full_name, profile_url(bourbon_article.contributor.url_code) %>
+       		    </div>
+                <% if bourbon_article.image %>	
+                	<%= link_to story_path(bourbon_article.clickable_title) do %>
+					  <div class="article-image-container" style="<%= ("background: url('" + bourbon_article.image.try(:upload).try(:url).to_s + "') no-repeat center center !important;background-size:cover !important;") %>"> 
+					  </div>
+					<% end %>
+				<% end %>					
+	    	    <div class="article-title ">
+	          		<%= link_to bourbon_article.article_title.upcase.truncate(80), story_path(bourbon_article.clickable_title), title: bourbon_article.article_title.titleize, class:'title-color' %>
+	       	    </div>
+	       		<div class="article-subtitle">
+	       			<%= link_to(bourbon_article.article_subtitle.upcase.truncate(60), story_path(bourbon_article.clickable_title), title: bourbon_article.article_title.titleize, class:'subtitle-color') %>
+	       		</div>
+	       	<!--<div class="article-comments">
+	       			<% comment_number = ['12', '5', '8', '19', '21', '3', '17'] %>
+	      			<%= link_to image_tag("../assets/comment_bubble.png", :alt => "comments", :width => 30, :height => 30) %> <%= comment_number.sample %>
+	      		</div>
+	      		<div class="article-bookmark">
+	        		<%= link_to image_tag("../assets/bookmark.png", :alt => "comments", :width => 15, :height => 20) %>
+	        </div>-->
+	        </div>
+		</div>
+		 
+	<% end %>
+		
+</div>
+
+<script>
+
+jQuery(document).ready(function($) {
+    var $container = $('#packery-container');
+    imagesLoaded( $container, function() {
+        $container.packery({
+            itemSelector: '.packery-item',
+ 			gutter: 10,
+        });
+    });
+});
+
+</script>

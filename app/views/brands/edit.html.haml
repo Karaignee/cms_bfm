@@ -1,0 +1,10 @@
+.row
+  .col-md-12
+    .page-header
+      %h1 Edit Brand
+=render partial: 'form'
+.row
+  .col-md-12
+    = link_to 'Back', brands_path
+    \|
+    = link_to 'View', @brand

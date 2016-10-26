@@ -1,0 +1,6 @@
+<h1>Come Join Bourbon.fm</h1>
+<p>Hi <%= @user_invite.first_name.titleize %>,</p>
+<p>Your friend <%= @user_invite.user.full_name %> has asked us to invite you to come join bourbon.fm.  To accept our invite, click this link and create a profile:</p>
+<p><%= link_to @server_name + '/user_invite/activate/' + @user_invite.activation_code, @server_name +  '/user_invite/activate/' + @user_invite.activation_code %></p>
+<p>Cheers,</p>
+<p><br/>Tom<br/><%= link_to 'bourbon.fm', @server_name %></p>

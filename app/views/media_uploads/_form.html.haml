@@ -1,0 +1,72 @@
+.row
+  .col-md-8.col-md-offset-2
+    =form_for(@media_upload, html: {class: 'form-horizontal', role: 'form', multipart: true }) do |f|
+      .well.well-sm
+        =render partial: '/layouts/error_messages', locals: {thing: @media_upload, message: nil}
+        -if f.object.id && f.object.media_type == 'image'
+          .form-group
+            .control-label.col-md-4
+              Thumbnail
+            .col-md-8
+              =image_tag(f.object.upload.url(:square))
+        .form-group
+          =f.label :description, class: 'control-label col-md-4'
+          .col-md-8
+            =f.text_field :description, placeholder: 'Description of the upload (internal use)', class: 'form-control'
+        .form-group
+          =f.label :tags, class: 'control-label col-md-4'
+          .col-md-8
+            =f.text_field :tags, placeholder: 'Enter tags, separated by commas.',class: 'form-control'
+        .form-group
+          =f.label :alt_tag, 'Tooltip text', class: 'control-label col-md-4'
+          .col-md-8
+            =f.text_field :alt_tag, placeholder: 'Brief description - tooltip / spoken to vision impaired people', class: 'form-control'
+        .form-group.image
+          .col-md-8.col-md-offset-4
+            .checkbox
+              =f.label :publicly_available, 'Allow other contributors to use this'
+              =f.check_box :publicly_available
+
+        .form-group
+          =f.label :media_type, 'Type', class: 'control-label col-md-4'
+          .col-md-8
+            =f.select :media_type, MediaUpload::MEDIA_TYPES, {}, {class: 'form-control', onchange: 'updateFields();'}
+        -if f.object.id.nil?
+          .form-group.image.sound
+            =f.label :upload, class: 'control-label col-md-4'
+            .col-md-8
+              =f.file_field :upload
+        .form-group.image
+          .col-md-8.col-md-offset-4
+            .checkbox
+              =f.label :make_text_bright, 'Show text in light colour'
+              =f.check_box :make_text_bright
+        .form-group.vid
+          =f.label :video_embed_code, class: 'control-label col-md-4'
+          .col-md-8
+            =f.text_field :video_embed_code, placeholder: '<embed code from youtube>', class: 'form-control'
+        .form-group
+          .col-md-8.col-md-offset-4
+            =f.submit 'Save', class: 'btn btn-success'
+
+:javascript
+
+  function updateFields() {
+    var img = $('.image');
+    var vid = $('.vid');
+    var sound = $('.sound');
+    img.addClass('hidden'); vid.addClass('hidden'); sound.addClass('hidden');
+
+    var choice = $('#media_upload_media_type').val();
+    if (choice == 'image') {
+      img.removeClass('hidden');
+    } else if (choice == 'audio') {
+      sound.removeClass('hidden');
+    } else if (choice == 'video') {
+      vid.removeClass('hidden');
+    }
+  }
+
+  $(document).on('ready page:load', function() {
+    updateFields();
+  })

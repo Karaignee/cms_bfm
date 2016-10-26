@@ -1,0 +1,31 @@
+.row
+  .col-md-12
+    .page-header
+      %h1
+        User Invite #
+        =@user_invite.id
+.row
+  .col-md-12
+    %table.table.table-striped.table-bordered
+      %tr
+        %td.col-sm-4 User
+        %td.col-sm-8=@user_invite.user.full_name
+      %tr
+        %td.col-sm-4 Invited at
+        %td.col-sm-8=@user_invite.invited_at
+      %tr
+        %td.col-sm-4 First name
+        %td.col-sm-8=@user_invite.first_name
+      %tr
+        %td.col-sm-4 Email
+        %td.col-sm-8=@user_invite.email
+      %tr
+        %td.col-sm-4 Invitee user
+        %td.col-sm-8=@user_invite.invitee_user.try(:full_name)
+      %tr
+        %td.col-sm-4 Emails sent
+        %td.col-sm-8=@user_invite.emails_sent
+    %p
+      =link_to 'Back', user_invites_url
+      |
+      =link_to 'Edit', edit_user_invite_url

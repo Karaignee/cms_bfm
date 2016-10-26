@@ -1,0 +1,148 @@
+<div class="container">
+  <div class="col-md-8 col-md-offset-2">
+    <hr class="no-margin"/>
+    <div class="form-group video-container">
+    <h1>New Video</h1>
+      <%= form_for @video, :html => {:id => 'video_upload'} do |form| %>
+
+          <%= form.hidden_field :url, :id => 'video_url' %>
+          <%= form.hidden_field :video_thumbnail, :id => 'video_thumbnail' %>
+
+          <div id="image_preview" style="width: 100%; display: none">
+            <br>
+            <% for i in 0..6 do %>
+                <img src="" id="preview_image_<%= i %>" class="" style="width: 12.5%; height: 60px; margin: 0px">
+            <% end %>
+          </div>
+          <br>
+
+          <%= form.label :title, 'Video title', class: 'control-label col-md-6 new-story-label video-title' %>
+          <%= form.text_field :title, class: 'form-control video-title-text', maxlength: 175 %>
+          <br>
+          <%= form.label :description, 'Video description', class: 'control-label col-md-6 new-story-label video-description' %>
+          <%= form.text_area :description, class: 'form-control' %>
+
+          </div>
+          <% if params[:action]=='edit' %>
+              <input class="btn btn-info" name="commit" type="submit" value="Save">
+          <% end %>
+
+
+
+          <% end %>
+<br>
+      <% if params[:action]=='new' %>
+
+    <form accept-charset="UTF-8" action="/" class="new_video_upload" id="upload" method="post">
+
+        <div class="col-md-6 no-padding video-upload">
+          Upload Video (max size 1gb)
+        </div>
+        <br>
+        <input accept="video/*" id="video_upload_file" name="file" type="file">
+        <input class="btn btn-info" id="upload_vid" name="commit" type="submit" value="Upload">
+
+
+      </form>
+      <% end %>
+
+      </div>
+</div>
+<link href="http://vjs.zencdn.net/4.12/video-js.css" rel="stylesheet">
+<script src="http://vjs.zencdn.net/4.12/video.js"></script>
+<script type="text/javascript" src="//assets.transloadit.com/js/jquery.transloadit2-v2-latest.js"></script>
+<script>
+
+    $(function () {
+        $('#upload').transloadit({
+            wait: true,
+            autoSubmit: false,
+            params: {
+                auth: {
+                    max_size: 1000000000,
+                    key: "24e471b0c73611e4a409973c06b30231"
+                },
+                steps: {
+                    android_video: {
+                        use: ":original",
+                        robot: "/video/encode",
+                        preset: "android"
+                    }
+                },
+                template_id: '6d24ec20c76811e4963475c03513c4c8'
+            },
+            onSuccess: function (assembly) {
+                console.log(assembly);
+//                var arrayLength = assembly.results.extracted_thumbs.length - 1;
+//                for (var i = 0; i < arrayLength; i++) {
+//                    $('#preview_image_' + i.toString()).attr("src", assembly.results.extracted_thumbs[i].url);
+//                }
+                $('#video_url').val(assembly.results.flash_encoding[0].url)
+                if (assembly.results.extracted_thumbs != null){
+                $('#video_thumbnail').val(assembly.results.extracted_thumbs[2].url)
+                }
+//                $('#image_preview').show()
+                $('#video_upload').submit();
+                return false;
+            },
+            onError: function (assembly) {
+                alert('error uploading video');
+                console.log(assembly);
+            }
+        });
+    });
+
+    $(document).on('ready', function () {
+        $("#video_upload_description").editable({
+            inlineMode: false,
+            showNextToCursor: true,
+            height: 720,
+            buttons: ["bold", "italic", "underline", "strikeThrough", "fontSize",
+                "color", "formatBlock", "blockStyle", "align", "insertOrderedList", "insertUnorderedList", "outdent",
+                "indent", "selectAll", "createLink", "insertImage", "insertVideo", "table", "undo", "redo", "insertHorizontalRule", "uploadFile"],
+            // Colors list.
+            colors: [
+                '#15E67F', '#E3DE8C', '#D8A076',
+                '#D83762', '#76B6D8', 'REMOVE',
+                '#1C7A90', '#249CB8', '#4ABED9',
+                '#FBD75B', '#FBE571', '#FFFFFF'
+            ],
+            borderColor: "#ccc",
+
+            // How many colors on a line.
+            colorsStep: 6,
+            imageUploadToS3: {
+                bucket: 'bourbonmedia',
+                region: 's3',
+                keyStart: 'uploads/',
+                callback: function (url, key) {
+                    // The URL and Key returned from Amazon.
+                    console.log(url);
+                    console.log(key);
+                },
+                params: {
+                    acl: 'public-read', // ACL according to Amazon Documentation.
+                    AWSAccessKeyId: 'AKIAIIGQ3ZWFIXPZUMPA', // Access Key from Amazon.
+                    policy: '<%= s3_upload_policy_document %>', // Policy string computed in the backend.
+                    signature: '<%= s3_upload_signature %>'
+                }
+            }
+        });
+    })
+
+
+
+
+    function submitArticleForm(form) {
+        form.append($('#video_url'));
+        form.append($('#video_title'));
+        form.submit();
+    }
+
+</script>
+
+<style>
+    .form-control {
+        border: 1px solid #000000;
+    }
+</style>

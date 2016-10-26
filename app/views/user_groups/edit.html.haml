@@ -1,0 +1,10 @@
+.row
+  .col-md-12
+    .page-header
+      %h1 Edit User Group
+= render 'form'
+.row
+  .col-md-12
+    = link_to 'Back', user_groups_path
+    \|
+    = link_to 'View', @user_group

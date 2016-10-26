@@ -1,0 +1,122 @@
+.modal.fade#banner_image_modal{tabindex: -1, role: 'dialog', aria: {labelledby: 'myModalLabel', hidden: true}}
+  .modal-dialog.modal-lg
+    .modal-content
+      .modal-header
+        %button{type: 'button', class: 'close', data: {dismiss: 'modal'}, aria: {hidden: true}} &times;
+        %h4.modal-title#myModalLabel 
+
+      .modal-body
+        .row
+          .col-md-12
+            %ul.modal-tabs
+              %li.active
+                %a{data: {toggle:'tab'}, href: '#image_uploader'} Upload New Image
+              %li
+                %a{data: {toggle:'tab'}, href: '#library_chooser'} Choose Image
+
+        .tab-content
+
+          .tab-pane.active.fade.in#image_uploader
+            .row
+            .col-sm-10.col-sm-offset-1
+              =form_for(MediaUpload.new(publicly_available: true), authenticity_token: true, data: {type: :json}, html: {remote: true, multipart: true, class: 'form-horizontal', role: 'form'}) do |f|
+                =f.hidden_field :media_type, value: 'image'
+                %br/
+                .form-group
+                  .col-md-8.col-md-offset-2
+                    #image_uploader_error.text-center.alert.alert-danger.hidden
+                .form-group
+                  =f.label :description, class: 'control-label col-md-4'
+                  %br/
+                  .col-md-12.col-no-padding.col-margin
+                    =f.text_field :description, placeholder: 'General description (internal use)', class: 'form-control'
+                  =f.label :tags, class: 'control-label col-md-4'
+                  %br/
+                  .col-md-12.col-no-padding.col-margin
+                    =f.text_field :tags, placeholder: 'Enter tags, separated by commas',class: 'form-control'
+                .form-group
+                  =f.label :alt_tag, 'Tooltip text', class: 'control-label col-md-4'
+                  %br/
+                  .col-md-12.col-no-padding.col-margin
+                    =f.text_field :alt_tag, placeholder: 'Brief description - tooltip / spoken to vision impaired users', class: 'form-control'
+                .form-group
+                  .col-md-12.col-no-padding
+                    .checkbox.modal-checkbox
+                      =f.label :publicly_available, 'Other contributors can use this upload'
+                      =f.check_box :publicly_available
+                .form-group
+                  .col-md-12.col-no-padding
+                    .checkbox.modal-checkbox
+                      =f.label :make_text_bright, 'Show text in light colour'
+                      =f.check_box :make_text_bright, {checked: true}
+                .form-group
+                  =f.label :upload, class: 'control-label col-md-4'
+                  %br/
+                  .col-md-12.col-no-padding.col-margin
+                    =f.file_field :upload, class: 'form-control', required: true
+
+            .modal-footer.modal-padding
+              .uploader-buttons-group
+                %button.btn.btn-success.save-button{type: 'submit', form: 'new_media_upload', onclick: "$('#image_uploader_error').text('').hide();"} Save
+                =link_to 'Cancel', '#', class: 'btn btn-default', data: {dismiss: 'modal'}
+
+          .tab-pane.fade#library_chooser
+            .row{style: 'max-height: 500px; overflow:auto; overflow-x: hidden;'}
+              .col-sm-10.col-sm-offset-1
+                &nbsp;
+                -MediaUpload.just_images.available_for(current_user.id).each do |image|
+                  .well.well-sm{onclick: "chooseThisImage(#{image.id},'" + image.upload.try(:url).to_s + "', " + image.make_text_bright.to_s + ');'}
+                    .row
+                      .col-sm-2=image_tag(image.upload.url(:thumb))
+                      .col-sm-10
+                        %strong=image.description
+                        %br/
+                        Tags:
+                        -image.tags.split(',').each do |tag|
+                          .label.label-default=tag
+                        %br/
+                        Alt Text:
+                        =image.alt_tag
+
+            .modal-footer
+              =link_to 'Close', '#', class: 'btn btn-success', data: {dismiss: 'modal'}
+
+:javascript
+
+  $(document).on('ready page:load', function() {
+    $("#new_media_upload").on("ajax:success", function(e, response, status, xhr) {
+      console.log('Success response');
+      $("#bourbon_article_image_id").val( response.id );
+      $(".jumbotron").attr("style", "background: #000 url('" + response.url + "') no-repeat center center !important;background-size:cover !important;");
+      $("#banner_image_modal").modal('hide');
+      if (response.light_text == true) {
+        makeStuffBright();
+      } else {
+        makeStuffDark();
+      }
+    }).on("ajax:error", function(e, xhr, status, error) {
+      console.log('Error response');
+      $("#image_uploader_error").text("Your image was not uploaded: " + xhr.responseJSON.error );
+      $("#image_uploader_error").removeClass('hidden').show();
+    });
+  })
+
+  function makeStuffBright() {
+    $(".jumbotron textarea, .jumbotron h1, .jumbotron p").css('color', "#eee");
+    $(".navbar-brand img").attr('src','/images/Single_B-white.png');
+  }
+
+  function makeStuffDark() {
+    $(".jumbotron textarea, .jumbotron h1, .jumbotron p").css('color', 'inherit');
+    $(".navbar-brand img").attr('src','/images/Single_B-black.png');
+  }
+
+  function chooseThisImage(image_id, image_url, use_light_text) {
+    $("#bourbon_article_image_id").val( image_id );
+    $(".jumbotron").attr("style", "background: #000 url('" + image_url + "') no-repeat center center !important;background-size:cover !important;");
+    if (use_light_text == true) {
+      makeStuffBright();
+    } else {
+      makeStuffDark();
+    }
+  }

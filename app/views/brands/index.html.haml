@@ -1,0 +1,21 @@
+.row
+  .col-md-12
+    .page-header
+      %h1 Brands
+.row
+  .col-md-12
+    %table.table.table-striped.table-bordered
+      %tr
+        %th Name
+        %th
+      -@brands.each do |brand|
+        %tr
+          %td=brand.name
+          %td
+            =link_to 'View', brand
+            =link_to 'Edit', edit_brand_url(brand)
+            -if brand.destroyable?
+              =link_to 'Delete', brand, method: :delete, data: { confirm: 'Are you sure?' }
+.row
+  .col-md-12
+    =link_to 'New', new_brand_url, class: 'btn btn-success'

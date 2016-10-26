@@ -1,0 +1,11 @@
+.page-header
+  %h2 Sign In
+=form_for @user_session, html: {role: 'form'} do |us|
+  =render partial: '/layouts/error_messages', locals: {thing: @user_session, message: 'prevented you from signing in:'}
+  .form-group
+    =us.email_field :email, placeholder: 'email address', autofocus: 'autofocus', class: 'form-control'
+  .form-group
+    =us.password_field :password, placeholder: 'password', class: 'form-control'
+  =us.submit 'Sign in', class: 'btn btn-success'
+  =link_to 'Forgot password?', new_password_reset_url
+

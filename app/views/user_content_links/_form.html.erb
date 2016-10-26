@@ -1,0 +1,22 @@
+<% # use this layout with the following code (change @user to whatever you need) %>
+  <%#= render partial: 'user_content_links/form', locals: {thing: @user, offer: %w(recommend want have) } %>
+<% # possible values for 'offer' are bookmark, recommend, have, want, no_thanks, and follow %>
+<% # --------------------------------------------------------------------------------------------- %>
+
+<% if current_user %>
+  <% offer ||= %w(recommend want have) %>
+  <div class="follow-button">
+    <% offer.each do |emotion| %>
+      <% preference = UserContentLink.preference_id(emotion) %>
+      <% @user_content_link = UserContentLink.where(user_id: current_user.id, preference: emotion).where(thing.class.name.underscore.downcase.gsub('user','profile') + '_id = ?', thing.id).first %>
+      <% if @user_content_link %>
+        <%= link_to(preference[:activated_name], @user_content_link, method: :delete, class: 'following-btn btn btn-xs btn-success', title: 'click to remove') %>
+      <% else %>
+        <%= form_for(UserContentLink.new, html: {class: 'form', role: 'form', style: 'display: inline;'}) do |f| %>
+          <%= f.hidden_field (thing.class.name.underscore.downcase.gsub('user','profile') + '_id').to_sym, value: thing.id %>
+          <%= f.submit preference[:public_name], class: 'follow-btn btn btn-xs btn-default', title: 'click to add' %>
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+<% end %>

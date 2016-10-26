@@ -1,0 +1,180 @@
+<%= content_for :jumbotron do %>
+<div class="container" style="padding:0px !important;margin:0px !important;height:100%;width:100%;">
+  <div class="jumbotron jumbotron-profile" style="background: #000 url('http://sandybourbonfm.s3-eu-west-1.amazonaws.com/development/media_uploads/2/original/slider_image3.png?1424488859') no-repeat !important;background-size:cover !important;color: #eee;">
+    <div class="container basic-info">
+      <div class="col-sm-12 col-basic-info">
+        <p class="profile-image">
+          <%= user_image(@user, size: 170) %>
+        </p>
+        <p class="profile-name">
+          <%= @user.full_name %>
+        </p>
+        <%= render partial: 'user_content_links/form', locals: {thing: @user, offer: ['follow']} %>
+        <div class="profile-group">
+	        <p class="profile-location">
+	          <i class="fa fa-map-marker profile-fa"></i>
+	          <%= @user.location || @user.country.name %>
+	        </p>
+	        <p class="profile-joined">
+	          <i class="fa fa-clock-o profile-fa"></i>
+	          Joined <%= @user.created_at.strftime("%B %Y") %>
+	        </p>
+	        <!---------- ADD REVIEWS FUNCTIONALITY ------------->
+	        <p class="number-of-reviews">
+	         <b style="color:#00BB9D;padding-right:3px;"><%= @user.bourbon_articles.count %></b> <%= @user.bourbon_articles.count == 1 ? "Story" : 'Stories'   %>
+	        </p>
+          <p class="number-of-reviews">
+            <b style="color:#00BB9D;padding-right:3px;"><%= @user.gear_pages.count %></b> <%= @user.gear_pages.count == 1 ? "Gear listing" : 'Gear listings'   %>
+          </p>
+	        <!--&lt;!&ndash;-------- PLACEHOLDER ICONS MISSING FUNCTIONALITY -----------&ndash;&gt;-->
+	        <!--<p>-->
+	           <!--<i class="fa fa-video-camera profile-icons-fa"></i>-->
+	           <!--<i class="fa fa-bullseye profile-icons-fa"></i>-->
+	           <!--<i class="fa fa-microphone profile-icons-fa"></i>-->
+	           <!--<i class="fa fa-headphones profile-icons-fa"></i>-->
+	           <!--<i class="fa fa-star profile-icons-fa"></i>-->
+	           <!--<i class="fa fa-trophy profile-icons-fa"></i>-->
+	        <!--</p>-->
+	        <!---------- ADD DESCRIPTION FUNCTIONALITY ------------->
+	        <p class="profile-description">
+	         This is where the user's description will go. This functionality needs to be added to the application.
+	        </p>
+	        <p>
+	          <% @user.tags.to_s.split(',').each do |tag| %>
+	            <%= link_to(tag.strip, welcome_people_url(tag: tag.strip), title: 'click to find people with this tag', class: 'btn btn-xs btn-success') %>
+	          <% end %>
+	        </p>
+	        <div class="fa-social-icons-profile">
+			    <a href="https://www.facebook.com/bourbon.fm">
+	              <span class="fa-stack fa-social-profile">
+	                <i class="fa fa-circle fa-stack-2x"></i>
+	                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+	              </span>
+	            </a>
+	            <a href="https://www.facebook.com/bourbon.fm">
+	              <span class="fa-stack fa-social-profile">
+	                <i class="fa fa-circle fa-stack-2x"></i>
+	                <i class="fa fa-soundcloud fa-stack-1x fa-inverse"></i>
+	              </span>
+	            </a>
+	            <a href="https://www.facebook.com/bourbon.fm">
+	              <span class="fa-stack fa-social-profile">
+	                <i class="fa fa-circle fa-stack-2x"></i>
+	                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+	              </span>
+	            </a>
+	            <a href="https://www.facebook.com/bourbon.fm">
+	              <span class="fa-stack fa-social-profile">
+	                <i class="fa fa-circle fa-stack-2x"></i>
+	                <i class="fa fa-youtube fa-stack-1x fa-inverse"></i>
+	              </span>
+	            </a>
+	            <a href="https://www.facebook.com/bourbon.fm">
+	              <span class="fa-stack fa-social-profile">
+	                <i class="fa fa-circle fa-stack-2x"></i>
+	                <i class="fa fa-instagram fa-stack-1x fa-inverse"></i>
+	              </span>
+	            </a>
+	            <a href="https://www.facebook.com/bourbon.fm">
+	              <span class="fa-stack fa-social-profile">
+	                 <i class="fa fa-circle fa-stack-2x"></i>
+	                 <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+	              </span>
+	            </a>  
+            </div> 
+            <p class="basic-info-copyright">
+              &copy; 2015 Bourbon &nbsp;&nbsp;&nbsp;&nbsp;About&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FAQ&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Help
+            </p>    
+	    </div>
+      </div>
+    </div>
+  </div>
+</div>
+<% end %>
+
+
+<!---------- ADD FUNCTIONALITY FOR COUNTER, LIKES, COLLECTIONS, FOLLOWING, FOLLOWERS, FAVORITES ------------->
+<% if @user.bourbon_articles_contributed.size > 0 %>
+  <div class="container container-top-padding">
+	<div class="col-xs-8 col-sm-8 col-sm-offset-3 col-lg-8 col-lg-offset-3 profile-tabs-column">
+      <div class="row">
+      	<ul class='tabs profile-tabs'>
+    	  <li><a href='#tab1'><b class="profile-counter">39</b><br/>LIKES</a></li>
+   		  <li><a href='#tab2'><b class="profile-counter">25</b><br/>COLLECTIONS</a></li>
+    	  <li><a href='#tab3'><b class="profile-counter">92</b><br/>FOLLOWING</a></li>
+    	  <li><a href='#tab4'><b class="profile-counter">23K</b><br/>FOLLOWERS</a></li>
+    	  <li><a href='#tab5'><b class="profile-counter">432</b><br/>FAVORITES</a></li>
+  		</ul>
+		  <div id='tab1'>
+				    <div class="row">
+		        	    <%#= render partial: 'welcome/stories_grid', locals: {bourbon_articles: @user.bourbon_articles} %>
+		      		</div>
+		  </div>
+		  <div id='tab2'>
+		    <p>This is the 2nd tab.</p>
+		  </div>
+		  <div id='tab3'>
+		    <p>And this is the 3rd tab.</p>
+		  </div>
+		  <div id='tab4'>
+		    <p>This is the 4th tab.</p>
+		  </div>
+		  <div id='tab5'>
+		    <p>This is the 5th tab.</p>
+		  </div>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<!--
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12">
+      <%#= link_to 'people', welcome_people_url %>
+    </div>
+  </div>
+</div> -->
+
+<script>
+	
+$('ul.tabs').each(function(){
+    // For each set of tabs, we want to keep track of
+    // which tab is active and it's associated content
+    var $active, $content, $links = $(this).find('a');
+
+    // If the location.hash matches one of the links, use that as the active tab.
+    // If no match is found, use the first link as the initial active tab.
+    $active = $($links.filter('[href="'+location.hash+'"]')[0] || $links[0]);
+    $active.addClass('active');
+
+    $content = $($active[0].hash);
+
+    // Hide the remaining content
+    $links.not($active).each(function () {
+      $(this.hash).hide();
+    });
+
+    // Bind the click event handler
+    $(this).on('click', 'a', function(e){
+      // Make the old tab inactive.
+      $active.removeClass('active');
+      $content.hide();
+
+      // Update the variables with the new link and content
+      $active = $(this);
+      $content = $(this.hash);
+
+      // Make the tab active.
+      $active.addClass('active');
+      $content.show();
+
+      // Prevent the anchor's default click action
+      e.preventDefault();
+    });
+  });
+</script>
+
+
+
+

@@ -1,0 +1,28 @@
+.row
+  .col-md-12
+    .page-header
+      %h1
+        Pre Registration #
+        =@pre_registration.id
+.row
+  .col-md-12
+    %table.table.table-striped.table-bordered
+      %tr
+        %td.col-sm-4 Email
+        %td.col-sm-8=@pre_registration.email
+      %tr
+        %td.col-sm-4 Ip address
+        %td.col-sm-8=@pre_registration.ip_address
+      %tr
+        %td.col-sm-4 Source
+        %td.col-sm-8=@pre_registration.source
+      %tr
+        %td.col-sm-4 User agent
+        %td.col-sm-8=@pre_registration.user_agent
+      %tr
+        %td.col-sm-4 Created
+        %td.col-sm-8=@pre_registration.created_at.to_s(:standard)
+    %p
+      =link_to 'Back', pre_registrations_url
+      |
+      =link_to 'Edit', edit_pre_registration_url

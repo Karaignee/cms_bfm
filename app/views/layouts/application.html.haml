@@ -1,0 +1,66 @@
+!!! 5
+%html{lang: 'en'}
+  %head
+    <!-- Codebase Copyright © 2015, Bourbon.fm. All rights reserved. -->
+    -if @page_title
+      %title=@page_title
+    -else
+      %title Bourbon FM - Welcome
+    -if @seo_tcd
+      -@seo_tags.each do |seo_tag|
+        %meta{name: seo_tag[:tag_name], content: seo_tag[:tag_value]}
+    %link{rel: 'shortcut icon', href: '/favicon.ico?v=3'}
+    <!--[if lt IE 9]>
+    %script{src: 'https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js'}
+    %script{src: 'https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js'}
+    <![endif]-->
+    / %link{rel: 'stylesheet', href: '//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.css'}
+    =stylesheet_link_tag    'application', media: 'all'
+    =javascript_include_tag 'application'
+    %script{src: '//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js'}
+    %script{src: '//cdnjs.cloudflare.com/ajax/libs/moment.js/2.7.0/moment.min.js'}
+    %script{src: '//cdn.jsdelivr.net/bootstrap.datetimepicker/3.0.0/js/bootstrap-datetimepicker.min.js'}
+    %link{rel: 'stylesheet', href: '//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css'}
+    %link{rel: 'stylesheet', href: '//fonts.googleapis.com/css?family=Lato:400,700|Droid+Serif:400,700,400italic,700italic'}
+    %link{rel: 'stylesheet', href: '//cdn.jsdelivr.net/bootstrap.datetimepicker/3.0.0/css/bootstrap-datetimepicker.min.css'}
+    =stylesheet_link_tag('medium-editor')
+    =stylesheet_link_tag('themes/default.css')
+    =stylesheet_link_tag('clean/bootstrap.css')
+    =stylesheet_link_tag('clean/default.css')
+    =stylesheet_link_tag('clean/clean-blog.css')
+    =stylesheet_link_tag('themes/default.css')
+    =stylesheet_link_tag('http://sarahjunefox.com/bourbon/bourbon-style.css')
+    %script{type: 'text/javascript', src: '//use.typekit.net/xrc2iva.js'}
+    %script{type: 'text/javascript'}
+      try{Typekit.load();}catch(e){}
+    =javascript_include_tag('medium-editor')
+    =csrf_meta_tags
+    %meta{name: 'viewport', content: 'width=device-width, initial-scale=1.0'}
+    =render partial: 'layouts/analytics' if Rails.env.production?
+    =javascript_include_tag('jquery.autosize.min')
+
+  %body{class: @special_body_class ? @special_body_class : ''}
+    #fb-root
+    =render partial: 'layouts/main_navbar'
+    -#if Rails.env.development? # todo:
+      .row
+        -cookies.sort.each do |cookie|
+          .col-md-3.well
+            =cookie[0]
+            %br/
+            \=
+            =cookie[1][0..19]
+    .top-padding
+    =yield :jumbotron
+    .container
+      -#cookie-holder
+      =render partial: '/layouts/flash_messages'
+      .row
+        .col-md-12
+          =yield
+      -#=render partial: '/layouts/cookies_policy'
+      .top-padding
+    =render partial: 'layouts/footer'
+
+    -#=render partial: 'layouts/intercom' if current_user
+    =render partial: 'layouts/wripl' if current_user

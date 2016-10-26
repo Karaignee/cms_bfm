@@ -1,0 +1,61 @@
+.row
+  .col-md-12
+    .page-header
+      %h1
+        Media Upload
+        =@media_upload.id
+.row
+  .col-md-12
+    %table.table.table-striped.table-bordered
+      %tr
+        %td.col-sm-4 Type
+        %td.col-sm-8=@media_upload.media_type
+      %tr
+        %td.col-sm-4 Description
+        %td.col-sm-8=@media_upload.description
+      %tr
+        %td.col-sm-4 Tags
+        %td.col-sm-8
+          -@media_upload.tags.split(',').each do |tag|
+            .label.label-default=tag
+      -if @media_upload.media_type == 'image'
+        %tr
+          %td.col-sm-4 Name
+          %td.col-sm-8=@media_upload.upload_file_name
+        %tr
+          %td.col-sm-4 Overlay text colour
+          %td.col-sm-8=@media_upload.make_text_bright ? 'Dark' : 'Bright'
+        %tr
+          %td.col-sm-4 Original
+          %td.col-sm-8=image_tag(@media_upload.upload.url)
+        %tr
+          %td.col-sm-4 Header Image
+          %td.col-sm-8=image_tag(@media_upload.upload.url(:large))
+        %tr
+          %td.col-sm-4 Thumbnail
+          %td.col-sm-8=image_tag(@media_upload.upload.url(:thumb))
+        %tr
+          %td.col-sm-4 Square
+          %td.col-sm-8=image_tag(@media_upload.upload.url(:square))
+        %tr
+          %td.col-sm-4 Medium
+          %td.col-sm-8=image_tag(@media_upload.upload.url(:medium))
+      -elsif @media_upload.media_type == 'audio'
+        %tr
+          %td.col-sm-4 Name
+          %td.col-sm-8=@media_upload.upload_file_name
+        %tr
+          %td.col-sm-4 File
+          %td.col-sm-8=link_to @media_upload.upload.file_name, @media_upload.upload.url
+      -elsif @media_upload.media_type == 'video'
+        %tr
+          %td.col-sm-4 Embed code
+          %td.col-sm-8=@media_upload.video_embed_code
+        %tr
+          %td.col-sm-4 Embed code
+          %td.col-sm-8=@media_upload.video_embed_code.html_safe
+    %p
+      =link_to 'Back', media_uploads_url
+      |
+      =link_to 'Edit', edit_media_upload_url(@media_upload)
+

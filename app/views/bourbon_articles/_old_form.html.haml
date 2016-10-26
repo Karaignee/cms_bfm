@@ -1,0 +1,54 @@
+.row
+  .col-md-12
+    =form_for(@bourbon_article, html: {class: 'form-horizontal', role: 'form', :multipart => true }) do |f|
+      .well.well-sm
+        =render partial: '/layouts/error_messages', locals: {thing: @bourbon_article, message: nil}
+        .form-group
+          =f.label :image_id, 'Header Image', class: 'control-label col-md-2'
+          .col-md-8
+            =f.text_field :image_id, placeholder:'Upload a header image for your story, or choose a Bourbon image...', class: 'form-control'
+
+        .form-group
+          =f.label :article_title, class: 'control-label col-md-2'
+          .col-md-8
+            =f.text_field :article_title, placeholder:'Enter your title here...', class: 'form-control'
+        .form-group
+          =f.label :article_subtitle, 'Subtitle', class: 'control-label col-md-2'
+          .col-md-8
+            =f.text_area :article_subtitle, placeholder:'Add a subtitle here...', class: 'form-control'
+        .form-group
+          .col-md-10.col-md-offset-2
+            .editable{style: 'min-height: 200px;'}=sanitize @bourbon_article.article_body, tags: %w(div p b i u strong em blockquote ul ol li h1 h2 h3), attributes: %w(style class id href alt title)
+        =f.hidden_field :article_body
+
+        .form-group
+          =f.label :tags, class: 'control-label col-md-2'
+          .col-md-4
+            =f.text_field :tags, placeholder: 'enter tags or keywords for your story', class: 'form-control'
+        .form-group
+          =f.label :media_uploads, 'Uploads', class: 'control-label col-md-2'
+          .col-md-4
+            =f.file_field :media_uploads, placeholder: 'attach images or other files', class: 'form-control'
+        -if current_user && current_user.curator?
+          .form-group
+            =f.label :contributor_id, 'Author name', class: 'control-label col-md-4'
+            .col-md-8
+              =f.collection_select :contributor_id, @contributors, :id, :full_name, {}, {prompt: 'Select...', class: 'form-control'}
+          .form-group
+            =f.label :article_published_at, class: 'control-label col-md-4'
+            .col-md-8
+              =f.datetime_select :article_published_at, class: 'form-control'
+
+        .form-group
+          .col-md-8.col-md-offset-4
+            =f.submit 'Save', class: 'btn btn-success', onclick: "$('#bourbon_article_article_body').val($('.editable').html());"
+
+:javascript
+  var editor = new MediumEditor('.editable', {
+    anchorInputPlaceholder: 'Type a link',
+    buttons: ['bold', 'italic', 'underline', 'quote', 'orderedlist', 'unorderedlist', 'indent', 'header1', 'header2', 'paragraph'],
+    targetBlank: true,
+    firstHeader: 'h2',
+    secondHeader: 'h3'
+  });
+

@@ -1,0 +1,102 @@
+=content_for :jumbotron do
+
+  =render partial: 'bourbon_articles/banner_image_modal'
+
+  .row
+    .col-md-12
+      =form_for(@bourbon_article, url: (@bourbon_article.new_record? ? stories_url : story_url(@bourbon_article.id)), html: {method: (@bourbon_article.new_record? ? :post : :patch), class: 'form-horizontal', role: 'form', multipart: true }) do |f|
+        =render partial: '/layouts/error_messages', locals: {thing: @bourbon_article, message: nil}
+        .jumbotron{style: (@bourbon_article.image ? "background: #fff url('" + @bourbon_article.image.try(:upload).try(:url).to_s + "') no-repeat center center;" : '') + @bourbon_article.image.try(:text_style).to_s}
+          .container
+            .col-md-8.col-md-offset-2
+              %h1=f.text_area :article_title, placeholder: 'Title...', class: 'form-control autosize-me', required: true, rows: 1, style: (@bourbon_article.image.try(:text_style).to_s), maxlength: 120
+              %p=f.text_area :article_subtitle, placeholder:'Subtitle ...', class: 'form-control autosize-me',rows: 2, style: @bourbon_article.image.try(:text_style), maxlength: 250
+              %p.text-muted{style: @bourbon_article.image.try(:text_style)}
+                %a#the_user_name=f.object.user.try(:full_name) || current_user.full_name
+                -#on
+                -#%span#the_date=(f.object.try(:created_at) || Time.now).to_s(:simple)
+              %small
+                =link_to image_tag('upload_image.jpg', size: '40x40', title: 'set a background image'), '#', data: { toggle: 'modal', target: '#banner_image_modal'}
+
+        .container
+          .col-md-8.col-md-offset-2
+            -#=link_to 'insert image', '', onclick: 'insertImageIntoTextArea(); return false;'
+            .form-group
+              .col-md-12
+                .editable{style: 'min-height: 200px; border-color: #transparent !important; outline: 0;'}=sanitize @bourbon_article.article_body, tags: %w(div p b i u strong em blockquote ul ol li h1 h2 h3), attributes: %w(style class id href alt title)
+            =f.hidden_field :article_body
+            =f.hidden_field :image_id
+            %hr/
+            .form-group
+              -#=f.label :tags, class: 'control-label col-md-2'
+              =f.text_area :tags, placeholder: 'Enter tags or keywords for your story. Separate each tag with a comma.', class: 'form-control', maxlength: '255', onkeyup: "$('#tag_counter').text((255 - $('#bourbon_article_tags').val().length) +' characters left');"
+              %p.muted#tag_counter
+            -if current_user && current_user.curator?
+              .form-group
+                -#=f.label :article_published_at, 'Request a publish date', class: 'control-label col-md-2'
+                =f.text_field :article_published_at, class: 'form-control datetimepicker', value: f.object.article_published_at.try(:to_s, :standard), data: {'date-format' => 'D MMMM YYYY h:mm A Z'}, title: 'Publish on/after this date'
+              %p.muted=link_to 'Publish as someone else', '', onclick: '$("#choose-contributor").removeClass("hide"); return false;'
+              .form-group.hide#choose-contributor
+                -#=f.label :contributor_id, 'Author name', class: 'control-label col-md-2'
+                .col-md-6
+                  =f.collection_select :contributor_id, @contributors, :id, :full_name, {}, {prompt: 'Select...', class: 'form-control', onchange: "$('#the_user_name').html($('#bourbon_article_contributor_id option:selected').text());"}
+            -else
+              =f.hidden_field :article_published_at
+              =f.hidden_field :contributor_id
+
+            .form-group
+              =f.submit 'Save as draft', class: 'btn btn-info', onclick: "$('#bourbon_article_article_body').val($('.editable').html());"
+              =f.submit 'Save and submit for Approval', class: 'btn btn-success', onclick: "$('#bourbon_article_article_body').val($('.editable').html());"
+              -if @bourbon_article.id
+                =link_to 'View', story_url(@bourbon_article.id)
+              or
+              =link_to 'cancel', welcome_contributor_url
+
+
+:javascript
+
+  $(document).on('ready page:load', function() {
+    var editor = new MediumEditor('.editable', {
+      anchorInputPlaceholder: 'Type a link',
+      buttons: ['bold', 'italic', 'underline', 'quote', 'orderedlist', 'unorderedlist', 'indent', 'header1', 'header2', 'paragraph'],
+      targetBlank: true,
+      firstHeader: 'h2',
+      secondHeader: 'h3',
+      placeholder: 'Tell your story...'
+    });
+
+    $(function () {
+        $('.datetimepicker').datetimepicker(
+        ).on('change', function() {
+          $('#the_date').text( $('#bourbon_article_article_published_at').val().split(' ').slice(0,3).join(' ') )
+        });
+    });
+  })
+
+  function insertImageIntoTextArea() {
+    var field = $(".editable:first")
+    var danTest = 'HELP! I AM TRAPPED INSIDE A PDP11';
+    insertAtCursor(field, danTest);
+    field.focus();
+  }
+
+  function insertAtCursor(myField, myValue) {
+    //IE support
+    if (document.selection) {
+      myField.focus();
+      sel = document.selection.createRange();
+      sel.text = myValue;
+    }
+    //MOZILLA and others
+    else if (myField.selectionStart || myField.selectionStart == '0') {
+      var startPos = myField.selectionStart;
+      var endPos = myField.selectionEnd;
+      myField.html() = myField.html().substring(0, startPos)
+        + myValue
+        + myField.value.substring(endPos, myField.html().length);
+    } else {
+      myField.html( myField.html() + myValue);
+    }
+  }
+
+  $('.autosize-me').autosize({append: ''});

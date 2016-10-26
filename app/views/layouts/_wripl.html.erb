@@ -1,0 +1,47 @@
+       <h1>Results:</h1>
+        <div id="output"></div>
+
+        <script>
+            var wriplClass = function(apiKey) {
+                return {
+                    apiKey: apiKey,
+
+                    getRecommendations: function() {
+                        $.ajax({
+                            url: '//api.wripl.com/v0.1/anonymous/recommendations',
+                            jsonp: 'callback',
+                            dataType: 'jsonp',
+                            data: {
+                                key: this.apiKey
+                            },
+                            success: function(response) {
+                                $('#output').append('<p>recommendations:<br />'+JSON.stringify(response)+'</p>');
+                            }
+                        });
+                    },
+
+                    getActivity: function(path) {
+                        $.ajax({
+                            url: '//api.wripl.com/v0.1/anonymous/activities',
+                            jsonp: 'callback',
+                            dataType: 'jsonp',
+                            data: {
+                                path: path,
+                                key: this.apiKey
+                            },
+                            success: function(response) {
+                                $('#output').append('<p>activities:<br />'+JSON.stringify(response)+'</p>');
+                            }
+                        });
+                    }
+                };
+            }; //1 - 45 are the functions to log the responses back from wripl? but which function is doing what AND does that stuff contain the call parameters? and then 47 on creates an instance of the wripl class using our API key?
+
+            var wripl = new wriplClass('a4f6d0758e97808c4cc5');
+
+                recommendations = wripl.getRecommendations();
+
+                activities = wripl.getActivity('/');
+        </script>
+
+ 

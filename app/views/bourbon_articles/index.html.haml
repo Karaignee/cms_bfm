@@ -1,0 +1,21 @@
+-#-if current_user.try(:contributor?)
+-#  -#.row
+-#    .col-sm-12
+-#      %p=link_to 'Write a new story', new_story_url, class: 'btn btn-success btn-sm'
+-#
+-#-@bourbon_articles.each do |bourbon_article|
+-#  .row
+-#    .col-sm-8.col-sm-offset-2
+-#      =link_to(image_tag(bourbon_article.image.try(:upload).try(:url, :large), class: 'img-responsive'), story_path(bourbon_article.clickable_title))
+-#      %h3.name=link_to bourbon_article.article_title.titleize, story_path(bourbon_article.clickable_title)
+-#      %p.text-muted=link_to(bourbon_article.article_subtitle.truncate(80), story_path(bourbon_article.clickable_title))
+-#      %p.text-muted
+-#        By
+-#        =link_to user_image(bourbon_article.contributor, size: 30, class: 'img-rounded'), profile_url(bourbon_article.contributor.url_code)
+-#        =link_to bourbon_article.contributor.full_name, profile_url(bourbon_article.contributor.url_code)
+-#      %p=sanitize(bourbon_article.article_body.truncate(300), tags: %w(b i u strong em), attributes: %w(style class id href alt title))
+-#      -if current_user
+-#        %p
+-#          Tags:
+-#          -bourbon_article.tags.split(',').each do |tag|
+-#            =link_to tag, tag_search_url(search_for_tag: tag), class: 'label label-default', title: 'search for more articles like this'

@@ -1,0 +1,65 @@
+<% if current_user && current_user.contributor? %>
+  <div class="row">
+    <div class="col-sm-12">
+      <p>
+        <%= link_to 'Upload new video', new_video_upload_url, class: 'btn btn-success btn-sm' %>
+      </p>
+    </div>
+  </div>
+<% end %>
+
+<div class="container">
+  <div class="row">
+    <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9 col-centered-packery">
+      <div class="row">
+       
+    <!-- PACKERY ------------------------------------------------------------->
+    
+    <div id="packery-video-container">
+        
+      <% @videos.each do |bourbon_article| %>
+        
+        <div class="packery-video-item bourbon-packery-video-card ">
+          <div class="packery-item-overlay">
+              <!--<div class="author-name">
+                      <%#= link_to user_image(bourbon_article.contributor, size: 20, class: 'img-circle'), profile_url(bourbon_article.contributor.url_code) %>
+                      <%#= link_to bourbon_article.contributor.full_name, profile_url(bourbon_article.contributor.url_code) %>
+                   </div>-->
+                  <div class="article-image-container">
+                  <i style="cursor: zoom-in" class="fa fa-play-circle fa-video-play-icon"></i>
+                      <% if bourbon_article.video_thumbnail %>
+                        <%= link_to(image_tag(bourbon_article.video_thumbnail, :style => 'padding:0px;'), video_upload_path(bourbon_article.id)) %>
+                      <% end %>
+                    </div>
+                  <div class="video-title">
+                    <%= link_to bourbon_article.title, video_upload_path(bourbon_article.id)  %>
+                  </div>
+
+              <!--<div class="article-comments">
+                  <% comment_number = ['12', '5', '8', '19', '21', '3', '17'] %>
+                  <%#= link_to image_tag("../assets/comment_bubble.png", :alt => "comments", :width => 30, :height => 30) %> <%#= comment_number.sample %>
+                </div>
+                <div class="article-bookmark">
+                  <%= link_to image_tag("../assets/bookmark.png", :alt => "comments", :width => 15, :height => 20) %>
+                </div>-->
+              </div>
+        </div>
+         
+      <% end %>
+        
+    </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+jQuery(document).ready(function($) {
+    var $container = $('#packery-video-container');
+    imagesLoaded( $container, function() {
+        $container.packery({
+            itemSelector: '.packery-video-item',
+      gutter: 10,
+        });
+    });
+});
+</script>

@@ -1,0 +1,26 @@
+.row
+  .page-header.text-center
+    %h1 People
+    -if params[:tag]
+      %p.leader
+        tag:
+        %span.btn.btn-xs.btn-success=params[:tag].to_s
+        =link_to 'x', welcome_people_url, title: 'reset', class: 'btn btn-xs btn-default'
+
+-col_counter = 0
+.row
+  -@users.each do |user|
+    -if col_counter >= 12
+      ="</div><div class='row'>".html_safe
+      -col_counter = 0
+    -col_counter += 4
+    .col-sm-4.people-mini-view
+      =link_to user_image(user, size: 330, class: 'img-rounded'), profile_path(user.url_code)
+      %h3.name=link_to user.full_name, profile_path(user.url_code)
+      %p.text-muted
+        -if user.location
+          =link_to((user.location + ','), profile_path(user.url_code))
+        =link_to user.country.name, profile_path(user.url_code)
+        %br/
+        -user.tags.to_s.split(',').each do |tag|
+          =link_to tag.strip, welcome_people_url(tag: tag.strip), class: 'btn btn-xs btn-success'

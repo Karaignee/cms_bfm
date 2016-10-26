@@ -1,0 +1,27 @@
+
+<div class="container">
+
+  <div class="row">
+    <div class="col-xs-10 col-sm-10 col-md-10 col-lg-9 col-centered-packery">
+      <div class="row">
+      <br>
+      <div class="related-title-landing"><%= link_to 'Stories', stories_url %></div>  
+      <br>
+        <%= render partial: 'welcome/stories_grid', locals: {bourbon_articles: @bourbon_articles} %>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="row">
+    <div class="col-xs-10 col-sm-10 col-md-10 col-lg-9 col-centered-packery">
+      <div class="row">
+      <br>
+      <div class="related-title-landing"><%= link_to 'Videos', video_uploads_url %></div>  
+      <br>
+        <%= render partial: 'welcome/videos_grid', locals: {videos: @videos} %>
+      </div>
+    </div>
+  </div>
+
+</div>

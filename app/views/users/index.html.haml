@@ -1,0 +1,36 @@
+.row
+  .col-md-12
+    .page-header
+      %h1 Users
+.row
+  .col-md-12
+    =will_paginate @users, renderer: BootstrapPagination::Rails
+    %table.table.table-striped.table-bordered
+      %thead
+        %tr
+          %th Email / Name
+          %th Active
+          %th Country
+          %th Actions
+      %tbody
+        -tracker = 0
+        -@users.each do |user|
+          -if tracker != user.user_group_id
+            -tracker = user.user_group_id
+            %tr
+              %td{colspan: 4}
+                %h4=link_to user.user_group.name, user.user_group
+          %tr
+            %td
+              =link_to user.email, user_path(user)
+              %br= user.full_name
+            %td= user.active ? 'Yes' : 'No'
+            %td=# todo: user.country.name
+            %td
+              =link_to 'Profile', profile_path(user.url_code)
+              =link_to 'Edit', edit_user_path(user), class: 'btn btn-xs btn-info'
+              -if user.destroyable?
+                =link_to 'Delete', user_path(user), method: :delete, data: { confirm: 'Are you sure?'}, class: 'btn btn-xs btn-danger'
+    =link_to 'New', new_user_path, class: 'btn btn-primary'
+    or manage
+    =link_to 'user groups', user_groups_url

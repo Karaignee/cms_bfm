@@ -1,0 +1,16 @@
+.row
+  .col-md-12
+    .page-header
+      -if @tag_search_results.size > 0
+        %h1
+          Tag Search:
+          =pluralize(@tag_search_results.count, 'match')
+          found
+
+.row
+  .col-md-12
+    -@tag_search_results.each do |one_result|
+      .well.one-result
+        =link_to truncate(one_result[:name], length: 50), one_result[:url], class: 'text-success'
+        .text-info=link_to truncate(one_result[:url], length: 50), one_result[:url]
+        .text-muted=truncate(one_result[:description], length: 150)

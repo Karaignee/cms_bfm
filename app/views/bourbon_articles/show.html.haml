@@ -1,0 +1,71 @@
+=content_for :jumbotron do
+  .jumbotron.text-center{style: (@bourbon_article.image ? "background: #fff url('" + @bourbon_article.image.try(:upload).try(:url).to_s + "') no-repeat center center !important;" : '') + (@bourbon_article.image.try(:make_text_bright) ? 'color: #eee;' : '')}
+    .container
+      .col-md-8.col-md-offset-2
+        %h1{style: 'line-height: 1em; padding-top: 50px;'}=@bourbon_article.article_title
+        %p.lead{style: 'padding: 20px 0 60px 0 !important; text-shadow: 0 2px 6px #000;'}=@bourbon_article.article_subtitle
+        %p.text-muted{style: (@bourbon_article.image.try(:make_text_bright) ? 'color: #eee;' : '')}
+          =user_image @bourbon_article.contributor, size: 60, class: 'img-circle'
+          =link_to @bourbon_article.contributor.full_name, profile_url(@bourbon_article.contributor.url_code), style: 'text-shadow: 0 2px 6px #000; color: ' + (@bourbon_article.image.try(:make_text_bright) ? '#eee;' : '#111;')
+          =#render partial: 'shared/popover_bottom', locals: {the_title: @bourbon_article.contributor.full_name, image_url: user_image_url(@bourbon_article.contributor, size: 75)}
+          -#on
+          =#@bourbon_article.article_published_at.to_s(:simple)
+
+.row.bourbon-article-detail-view
+  .col-md-8.col-md-offset-2
+    =sanitize @bourbon_article.article_body.gsub("\r", '<br/>'), tags: %w(div p b i u strong em blockquote ul ol li h1 h2 h3), attributes: %w(style class id href alt title)
+
+%hr/
+
+-if current_user
+  .row
+    .col-md-8.col-md-offset-2
+      %p
+        Tags:
+        -@bourbon_article.tags.split(',').each do |tag|
+          =link_to tag, tag_search_url(search_for_tag: tag), class: 'label label-default', title: 'search for more articles like this'
+  .row
+    .col-sm-8.col-md-offset-2
+      =render partial: 'user_content_links/form', locals: {thing: @bourbon_article, offer: ['recommend', 'bookmark']}
+
+-if current_user && ((current_user.id == @bourbon_article.user_id || current_user.id == @bourbon_article.contributor_id) || current_user.curator? || current_user.admin?)
+  .row
+    .col-sm-8.col-sm-offset-2
+
+      %table.table.table-striped.table-bordered
+        %tr
+          %td.col-sm-3
+            .text-muted Approval
+            =@bourbon_article.visible ? 'Approved' : 'Not yet approved'
+            -if (current_user.admin? || (current_user.curator? && current_user.id != @bourbon_article.user_id)) && @bourbon_article.visible != true
+              =form_for(@bourbon_article, url: story_url(@bourbon_article.id), html: {method: :put, class: 'form', role: 'form', style: 'display: inline;'}) do |f|
+                =f.hidden_field :curator_id, value: current_user.id
+                =f.submit 'Approve Now', class: 'btn btn-danger btn-xs', data: {confirm: 'Are you sure this article is ready for publication?'}
+
+          %td.col-sm-2
+            .text-muted Visible?
+            =@bourbon_article.is_active? ? 'Visible' : 'Not visible'
+          %td.col-sm-3
+            .text-muted Embargo
+            =@bourbon_article.article_published_at.to_s(:simple)
+
+          %td.col-sm-4
+            %span.text-muted Writer:
+            =link_to @bourbon_article.user.try(:full_name), profile_url(@bourbon_article.user.url_code)
+            %br/
+            %span.text-muted Contributor:
+            -if @bourbon_article.contributor
+              =link_to @bourbon_article.contributor.try(:full_name), profile_url(@bourbon_article.contributor.url_code)
+            %br/
+            %span.text-muted Curator:
+            -if @bourbon_article.curator
+              =link_to @bourbon_article.curator.try(:full_name), profile_url(@bourbon_article.curator.url_code)
+      %p
+        =link_to 'Edit', edit_story_url, class: 'btn btn-success'
+        or
+        =link_to 'Back', welcome_contributor_url
+
+-else
+  .row
+    .col-sm-8.col-sm-offset-2
+      %p=link_to 'Back', root_url

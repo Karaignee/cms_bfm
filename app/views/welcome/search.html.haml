@@ -1,0 +1,19 @@
+.row
+  .col-md-12
+    .page-header
+      -if @search_results.size > 0
+        %h1
+          Your search generated
+          =pluralize(@search_results.count, 'result') + ':'
+      -else
+        %h1 Nothing found: try again...
+      .lead
+        =form_tag(search_request_url) do
+          =text_field_tag :search_for_this, params[:search_for_this], placeholder: 'search...', onblur: 'this.form.submit(); return false;'
+.row
+  .col-md-12
+    -@search_results.each do |one_result|
+      .well.one-result
+        =link_to truncate(one_result[:name], length: 50), one_result[:url], class: 'text-success'
+        .text-info=link_to 'http://localhost:3000' + truncate(one_result[:url], length: 50), one_result[:url]
+        .text-muted=truncate(one_result[:description], length: 150)

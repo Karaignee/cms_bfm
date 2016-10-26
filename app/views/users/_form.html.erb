@@ -1,0 +1,91 @@
+<div class="row row-no-margin">
+    <div class="col-xs-12 offset col-sm-4 col-sm-offset-4 col-md-4 col-md-offset-4">
+    <%= form_for @user, html: {class: 'form-horizontal', role: 'form'} do |f| %>
+      <% if !@user_invite.nil? %>
+        <%= hidden_field_tag :user_invite_activation_code, @user_invite.activation_code %>
+      <% end %>
+      <%= render partial: 'layouts/error_messages', locals: {thing: @user, message: nil} %>
+      <div class="form-group register-form-group">
+        <div class="col-sm-8 col-md-8">
+          <%= f.text_field :first_name, placeholder: 'Jay', autofocus: true, class: 'form-control', required: true %>
+        </div>
+        <%= f.label :first_name, class: 'control-label col-sm-4' %>
+      </div>
+      <div class="form-group register-form-group">
+        <div class="col-sm-8 col-md-8">
+          <%= f.text_field :last_name, placeholder: 'Dee', class: 'form-control', required: true %>
+        </div>
+        <%= f.label :last_name, class: 'control-label col-sm-4' %>
+      </div>
+      <div class="form-group register-form-group">
+        <div class="col-sm-8 col-md-8">
+          <%= f.email_field :email, placeholder: 'jaydee@example.com', class: 'form-control', readonly: !@user_invite.nil?, required: @user_invite.nil? %>
+        </div>
+        <%= f.label :email, class: 'control-label col-sm-4' %>
+      </div>
+      <% if !current_user || (current_user && current_user.admin?) %>
+        <div class="form-group register-form-group">
+          <div class="col-sm-8 col-md-8">
+            <%= f.password_field :password, placeholder: '******', class: 'form-control' %>
+          </div>
+          <%= f.label :password, class: 'control-label col-sm-4' %>
+        </div>
+        <div class="form-group register-form-group">
+          <div class="col-sm-8 col-md-8">
+            <%= f.password_field :password_confirmation, placeholder: '******', class: 'form-control' %>
+          </div>
+          <%= f.label :password_confirmation, class: 'control-label col-sm-4' %>
+        </div>
+      <% end %>
+      <div class="form-group register-form-group">
+        <div class="col-sm-8 col-md-8">
+          <%= f.collection_select :country_id, @countries, :id, :name, {}, class: 'form-control' %>
+        </div>
+        <%= f.label :country_id, class: 'control-label col-sm-4' %>
+      </div>
+      <div class="form-group register-form-group">
+        <div class="col-sm-8 col-md-8">
+          <%= f.text_field :location, placeholder: 'London, Tallin, Orange County, wherever you are', class: 'form-control', required: true %>
+        </div>
+        <%= f.label :location, class: 'control-label col-sm-4' %>
+      </div>
+      <div class="form-group register-form-group">
+        <div class="col-sm-8 col-md-8">
+          <%= f.time_zone_select :time_zone, nil, {}, class: 'form-control' %>
+        </div>
+        <%= f.label :time_zone, class: 'control-label col-sm-4' %>
+      </div>
+      <div class="form-group register-form-group">
+        <div class="col-sm-8 col-md-8">
+          <%= f.text_field :tags, placeholder: 'Guitar, piano, singer, songwriter', class: 'form-control', required: true %>
+        </div>
+        <%= f.label :tags, class: 'control-label col-sm-4' %>
+      </div>
+      <% if current_user && current_user.admin? %>
+        <div class="form-group register-form-group">
+          <div class="col-sm-8 col-md-8">
+            <%= f.collection_select :user_group_id, @user_groups, :id, :name, {}, {class: 'form-control'} %>
+          </div>
+          <%= f.label :user_group_id, class: 'control-label col-sm-4' %>
+        </div>
+        <div class="form-group register-form-group">
+            <div class="checkbox">
+              <%= f.label :active %>
+              <%= f.check_box :active %>
+            </div>
+        </div>
+      <% end %>
+      <div class="col-sm-8 col-md-8">
+      <div class="form-group email-alerts">
+          <%= f.check_box :allow_email_alerts %>
+          <%= f.label :allow_email_alerts, style:'font-weight:200 !important;' %>
+      </div>
+      <div class="form-group" style="width: 414px !important;">
+          <%= f.submit 'Save', class: 'btn btn-success' %>
+          <%= link_to 'Sign up using your Facebook ID', '/auth/facebook', id: 'fb_sign_in', class: 'btn btn-primary btn-facebook', target: '_top' %>
+        </div>
+      </div>
+    <% end %>
+    </div>
+  </div>
+</div>

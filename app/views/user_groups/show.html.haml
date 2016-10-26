@@ -1,0 +1,45 @@
+.row
+  .col-md-12
+    %h1
+      .page-header
+        User Group:
+        =@user_group.name
+
+.row
+  .col-md-12
+    %table.table.table-bordered
+      %tr
+        %td.col-md-2 Name:
+        %td.col-md-4= @user_group.name
+        %td.col-md-2 Description:
+        %td.col-md-4= @user_group.description
+      %tr
+        %td.col-md-2 System admin?
+        %td.col-md-4=@user_group.is_admin ? 'Yes' : 'No'
+        %td.col-md-2 User Invites limit
+        %td.col-md-4
+          -if @user_group.limit_user_invites_for_this_group
+            =@user_group.invites_limit_per_user
+          -else
+            Unlimited invites
+      %tr
+        %td.col-md-2 Curator?
+        %td.col-md-4=@user_group.is_curator ? 'Yes' : 'No'
+        %td.col-md-2 Contributor?
+        %td.col-md-4=@user_group.is_contributor ? 'Yes' : 'No'
+      %tr
+        %td.col-md-2 Users:
+        %td{class: 'col-md-10', colspan:3}
+          -if @user_group.users.size > 10 || @user_group.users.empty?
+            =@user_group.users.size
+            users
+          -else
+            -@user_group.users.each do |user|
+              =link_to user.full_name, user_url(user.id)
+
+.row
+  .col-md-12
+    %p
+      = link_to 'Back', user_groups_path
+      \|
+      = link_to 'Edit', edit_user_group_path(@user_group)

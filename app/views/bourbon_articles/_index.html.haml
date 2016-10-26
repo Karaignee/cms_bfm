@@ -1,0 +1,24 @@
+%table.table.table-bordered.table-striped
+  %tr
+    %th Headline / Subtitle
+    %th Author / Contributor
+    %th Last updated
+    %th Action
+  -the_articles.each do |article|
+    %tr
+      %td
+        =article.article_title
+        %br
+        %span.text-muted=article.article_subtitle
+      %td
+        =article.user.full_name
+        -if article.user_id != article.contributor_id
+          %br/
+          %span.text-muted='(for ' + article.contributor.try(:full_name).to_s + ')'
+      %td=article.updated_at.to_s(:standard)
+      -if current_user.contributor? && article.ready_for_curation != true
+        %td=link_to 'Edit', edit_story_url(article), class: 'btn btn-success btn-xs dashboard-btn'
+      -elsif current_user.curator? && article.ready_for_curation && !article.visible
+        %td=link_to 'Review', story_url(article), class: 'btn btn-primary btn-xs dashboard-btn'
+      -else
+        %td=link_to 'View', story_url(article), class: 'btn btn-info btn-xs dashboard-btn'

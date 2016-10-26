@@ -1,0 +1,22 @@
+.row
+  .col-md-12
+    .page-header
+      %h1
+        Gear Category #
+        =@gear_category.id
+.row
+  .col-md-12
+    %table.table.table-striped.table-bordered
+      %tr
+        %td.col-sm-4 Name
+        %td.col-sm-8=@gear_category.name
+      %tr
+        %td.col-sm-4 Description
+        %td.col-sm-8=@gear_category.description
+      %tr
+        %td.col-sm-4 Gear page
+        %td.col-sm-8=@gear_category.gear_page
+    %p
+      =link_to 'Back', gear_categories_url
+      |
+      =link_to 'Edit', edit_gear_category_url

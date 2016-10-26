@@ -1,0 +1,15 @@
+Welcome to Bourbon.FM
+=====================
+
+Hi <%= @user.first_name.titleize %>,
+
+Thanks so much for registering. To activate your account, follow this link:
+
+  <%= @server_name + 'activate/' + @user.activation_code %>
+
+If you need help, get in touch.
+
+Rock on,
+
+
+Tom

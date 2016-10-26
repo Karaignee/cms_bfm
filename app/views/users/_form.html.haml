@@ -1,0 +1,64 @@
+.row
+  .col-md-8.col-md-offset-2
+    =form_for @user, html: {class: 'form-horizontal', role: 'form'} do |f|
+      -if !@user_invite.nil?
+        =hidden_field_tag :user_invite_activation_code, @user_invite.activation_code
+      =render partial: 'layouts/error_messages', locals: {thing: @user, message: nil}
+      .form-group
+        =f.label :first_name, class: 'control-label col-sm-4'
+        .col-md-8
+          =f.text_field :first_name, placeholder: 'Jay', autofocus: true, class: 'form-control', required: true
+      .form-group
+        =f.label :last_name, class: 'control-label col-sm-4'
+        .col-md-8
+          =f.text_field :last_name, placeholder: 'Dee', class: 'form-control', required: true
+      .form-group
+        =f.label :email, class: 'control-label col-sm-4'
+        .col-md-8
+          =f.email_field :email, placeholder: 'jaydee@example.com', class: 'form-control', readonly: !@user_invite.nil?, required: @user_invite.nil?
+      -if !current_user || (current_user && current_user.admin?)
+        .form-group
+          =f.label :password, class: 'control-label col-sm-4'
+          .col-md-8
+            =f.password_field :password, placeholder: '******', class: 'form-control'
+        .form-group
+          =f.label :password_confirmation, class: 'control-label col-sm-4'
+          .col-md-8
+            =f.password_field :password_confirmation, placeholder: '******', class: 'form-control'
+
+      .form-group
+        =f.label :country_id, class: 'control-label col-sm-4'
+        .col-md-8
+          =f.collection_select :country_id, @countries, :id, :name, {}, class: 'form-control'
+      .form-group
+        =f.label :location, class: 'control-label col-sm-4'
+        .col-md-8
+          =f.text_field :location, placeholder: 'London, Tallin, Orange County, wherever you are', class: 'form-control', required: true
+      .form-group
+        =f.label :time_zone, class: 'control-label col-sm-4'
+        .col-md-8
+          =f.time_zone_select :time_zone, nil, {}, class: 'form-control'
+      .form-group
+        =f.label :tags, class: 'control-label col-sm-4'
+        .col-md-8
+          =f.text_field :tags, placeholder: 'Guitar, piano, singer, songwriter', class: 'form-control', required: true
+      -if current_user && current_user.admin?
+        .form-group
+          =f.label :user_group_id, class: 'control-label col-sm-4'
+          .col-md-8
+            =f.collection_select :user_group_id, @user_groups, :id, :name, {}, {class: 'form-control'}
+        .form-group
+          .col-md-8.col-md-offset-4
+            .checkbox
+              =f.label :active
+              =f.check_box :active
+      .form-group
+        .col-md-8.col-md-offset-4
+          .checkbox
+            =f.label :allow_email_alerts
+            =f.check_box :allow_email_alerts
+      .form-group
+        .col-md-8.col-md-offset-4
+          =f.submit 'Save', class: 'btn btn-success'
+
+

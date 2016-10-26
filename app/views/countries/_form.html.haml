@@ -1,0 +1,29 @@
+.row
+  .col-md-8.col-md-offset-2
+    =form_for(@country, html: {class: 'form-horizontal', role: 'form'}) do |f|
+      .well.well-sm
+        =render partial: '/layouts/error_messages', locals: {thing: @country, message: nil}
+        .form-group
+          =f.label :name, class: 'control-label col-md-4'
+          .col-md-8
+            =f.text_field :name, class: 'form-control'
+        .form-group
+          .col-md-8.col-md-offset-4
+            .checkbox
+              =f.check_box :in_the_eu
+              =f.label :in_the_eu
+        .form-group
+          =f.label :running_order, class: 'control-label col-md-4'
+          .col-md-8
+            =f.number_field :running_order, class: 'form-control'
+        .form-group
+          =f.label :iso_code, class: 'control-label col-md-4'
+          .col-md-8
+            =f.text_field :iso_code, class: 'form-control'
+        .form-group
+          =f.label :country_tld, class: 'control-label col-md-4'
+          .col-md-8
+            =f.text_field :country_tld, class: 'form-control'
+      =f.submit 'Save', class: 'btn btn-success'
+      or
+      =link_to 'cancel', countries_path

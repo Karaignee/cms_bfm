@@ -1,0 +1,25 @@
+
+.container
+  .row
+    .col-md-12
+      %h1
+        Welcome to Bourbon
+      .page-header
+        Activate your invitation to join our site
+
+  .row
+    .col-md-8.col-md-offset-2
+      .well
+        %p
+          Hi
+          =@user_invite.first_name + ','
+        %p
+          Our friend
+          %strong=@user_invite.user.full_name
+          asked us to invite you to join
+          =link_to 'bourbon.fm', root_url
+          because they know you love music just as much as we do.
+  .row
+    .col-md-8.col-md-offset-2
+      %h2.text-center Create your profile:
+    =render partial: 'users/form'

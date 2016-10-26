@@ -1,0 +1,24 @@
+.row
+  .col-md-12
+    .page-header
+      %h1 Gear Categories
+.row
+  .col-md-12
+    %table.table.table-striped.table-bordered
+      %tr
+        %th Name
+        %th Description
+        %th Gear page
+        %th
+      -@gear_categories.each do |gear_category|
+        %tr
+          %td=gear_category.name
+          %td=gear_category.description
+          %td
+            =link_to 'View', gear_category
+            =link_to 'Edit', edit_gear_category_url(gear_category)
+            -if gear_category.destroyable?
+              =link_to 'Delete', gear_category, method: :delete, data: { confirm: 'Are you sure?' }
+.row
+  .col-md-12
+    =link_to 'New', new_gear_category_url, class: 'btn btn-success'

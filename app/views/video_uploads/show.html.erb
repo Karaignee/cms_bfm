@@ -1,0 +1,60 @@
+<header class="video" style="background-color:#000;">
+	<div class="video-inner">
+    	<div class="item active">
+        	<div class="fill">
+	        	<video style="width: 100%;padding-left:5%;padding-right:5%" id="MY_VIDEO_1" class="video-js vjs-default-skin vjs-big-play-centered" controls autoplay
+	            	preload="auto" poster="MY_VIDEO_POSTER.jpg"
+	                data-setup="{}">
+	                	<source src="<%= @video.url %>" type='video/mp4'>
+	                	<source src="<%= @video.url %>" type='video/webm'>
+	                	<p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
+	            </video>
+            </div>
+    	</div>
+	</div>
+</header>
+
+<div class="container">    
+	<div class="row row-bottom-padding">
+		
+		<div class="col-xs-12 col-sm-2 col-md-2 video-info-column">
+			<div class="author-title"></div>
+			<div class="video-details">
+	            <p><%= @video.created_at.strftime("%A %C %h %Y %R %Z") %></p>
+			</div>
+            <div class="video-details video-details-padding">
+              &copy; 2015 Bourbon
+            </div>    
+		</div> <!-- end video info column -->
+		
+		<div class="col-xs-12 col-sm-6 col-md-6-custom">
+			<div class="video-show-cards-title">
+	     		<%= @video.title %>
+            </div>
+            <div class="video-show-cards-description">
+	     		<%= simple_format(@video.description.html_safe) %>
+			</div>
+        </div>  <!-- end video title & description column -->    
+
+        <div class=" col-xs-12 col-sm-4 col-md-4-custom related-videos-column">
+        	<div class="related-title">Related Videos</div>
+        	<br/>
+	        	<% VideoUpload.all.each do |bourbon_article| %>
+	        	<% unless bourbon_article.id == @video.id %>
+	        		<% if bourbon_article.video_thumbnail %>
+	                <p class="video-wrapper">
+		                	<%= link_to(image_tag(bourbon_article.video_thumbnail, :style => 'padding:0px;'), video_upload_path(bourbon_article.id)) %>
+		                <% end %>
+		        		<i class="fa fa-video-camera video-fa"></i><%= link_to bourbon_article.title, video_upload_path(bourbon_article.id)  %>
+	        		</p>
+	            <% end %>
+	            <% end %>
+	    </div>  <!-- end related videos column -->
+	     
+    </div>  <!-- end row --> 
+</div> <!-- end container -->
+
+<!--<link href="http://vjs.zencdn.net/4.12/video-js.css" rel="stylesheet">
+<script src="http://vjs.zencdn.net/4.12/video.js"></script>
+<script type="text/javascript" src="//assets.transloadit.com/js/jquery.transloadit2-v2-latest.js"></script>-->
+

@@ -1,0 +1,41 @@
+<% col_counter = 0 %>
+<% row_counter = 0 %>
+<% col_width = 5 %>
+<% bourbon_articles.each do |bourbon_article| %>
+  <% if col_counter >= 12 %>
+    <%= "</div><div class='row'>".html_safe %>
+    <% col_counter = 0 %>
+    <% row_counter += 1 %>
+    <% col_width = row_counter.even? ? 7 : 5 %>
+  <% else %>
+    <% col_width = (col_width == 7 ? 5 : 7) %>
+  <% end %>
+  <% col_counter += col_width %>
+  <div class="col-xs-12 col-sm-12 col-lg-<%= col_width %> bourbon-article-mini-view">
+    <div class="row">
+      <% if bourbon_article.image %>
+        <%= link_to(image_tag(bourbon_article.image.upload.url("story_mini_view_#{col_width}".to_sym), class: 'col-sm-12 article-image'), story_path(bourbon_article.clickable_title), title: bourbon_article.article_title.titleize) %>
+      <% end %>
+      <div class="col-sm-12 bourbon-mini-view-info">
+        <div class="article-title">
+          <%= link_to bourbon_article.article_title.upcase.truncate(55), story_path(bourbon_article.clickable_title), title: bourbon_article.article_title.titleize %>
+        </div>
+        <div class="article-subtitle" style="margin-bottom: -5px !important;">
+          <%= link_to(bourbon_article.article_subtitle.truncate(70), story_path(bourbon_article.clickable_title), title: bourbon_article.article_title.titleize) %>
+        </div>
+        <div class="author-name">
+          <%= link_to user_image(bourbon_article.contributor, size: 30, class: 'img-circle'), profile_url(bourbon_article.contributor.url_code) %>
+          <%= link_to bourbon_article.contributor.full_name, profile_url(bourbon_article.contributor.url_code) %>
+        </div>
+      </div>
+      <% #if current_user %>
+   <!-- <p>
+          Tags:
+          <% #bourbon_article.tags.split(',').each do |tag| %>
+            <%#= link_to tag, tag_search_url(search_for_tag: tag), class: 'label label-default', title: 'search for more articles like this' %>
+          <%# end %>
+        </p>-->
+      <% #end %>
+    </div>
+  </div>
+<% end %>

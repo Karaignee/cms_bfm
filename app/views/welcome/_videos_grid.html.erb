@@ -1,0 +1,63 @@
+
+<% col_counter = 0 %>
+<% row_counter = 0 %>
+<% col_width = 5 %>
+<% @videos.each do |video| %>
+  <% if col_counter >= 12 %>
+    <%= "</div><div class='row'>".html_safe %>
+    <% col_counter = 0 %>
+    <% row_counter += 1 %>
+    <% col_width = row_counter.even? ? 7 : 5 %>
+  <% else %>
+    <% col_width = (col_width == 7 ? 5 : 7) %>
+  <% end %>
+  <% col_counter += col_width %>
+<% end %>
+<!-- PACKERY ------------------------------------------------------------->
+<br>
+
+<div id="packery-video-container">
+
+
+  <% @videos.each do |video| %>
+		
+		<div class="packery-video-item bourbon-packery-video-card" style="padding-top: 0px">
+			<div class="packery-item-overlay">
+       		    <div class="article-image-container">
+                  <% if video.video_thumbnail %>
+			  		<%= link_to(image_tag(video.video_thumbnail, class: 'article-image article-image-margin', :style => 'padding:0px;margin-bottom:5px;' ), video_upload_path(video), title: video.title) %>
+	    	      <% end %>
+                </div>
+	    	    <div class="article-title ">
+	          		<%= link_to video.title.upcase, video_upload_path(video), title: video.title.titleize, class:'title-color' %>
+	       	    </div>
+	       	<!--<div class="article-subtitle">
+	       			<%#= link_to(ActionView::Base.full_sanitizer.sanitize(video.description).html_safe.upcase.truncate(120), video_upload_path(video), title: video.title.titleize, class:'subtitle-color') %>
+	       		</div>-->
+	       	<!--<div class="article-comments">
+	       			<% comment_number = ['12', '5', '8', '19', '21', '3', '17'] %>
+	      			<%= link_to image_tag("../assets/comment_bubble.png", :alt => "comments", :width => 30, :height => 30) %> <%= comment_number.sample %>
+	      		</div>
+	      		<div class="article-bookmark">
+	        		<%= link_to image_tag("../assets/bookmark.png", :alt => "comments", :width => 15, :height => 20) %>
+	        </div>-->
+	        </div>
+		</div>
+		 
+	<% end %>
+		
+</div>
+
+<script>
+
+jQuery(document).ready(function($) {
+    var $container = $('#packery-video-container');
+    imagesLoaded( $container, function() {
+        $container.packery({
+            itemSelector: '.packery-video-item',
+ 			gutter: 10,
+        });
+    });
+});
+
+</script>

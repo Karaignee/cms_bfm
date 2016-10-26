@@ -1,0 +1,55 @@
+<%= form_for @genre, :html => {:multipart => true, :class => "form-horizontal"} do |f| %>
+        <% if @genre.errors.any? %>
+            <div id="error_explanation">
+              <h2><%= pluralize(@genre.errors.count, "error") %> prohibited this Genre from being saved:</h2>
+
+              <ul>
+                <% @genre.errors.full_messages.each do |message| %>
+                    <li><%= message %></li>
+                <% end %>
+              </ul>
+            </div>
+        <% end %>
+
+
+
+
+        <div class='col-md-9'>
+          <div class='form-group'>
+            <%= f.label :name, class: "col-md-4 control-label" %>
+            <div class="col-md-8">
+              <%= f.text_field :name, placeholder: 'Folk, Rock, Blues, Electro etc', class: 'form-control' %>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :profile_image, class: "col-md-4 control-label" %>
+          <div class="col-md-8">
+            <%= f.file_field :profile_image %>
+            </div>
+          </div>
+
+
+          <div class="form-group">
+            <%= f.label :description, class: "col-md-4 control-label" %>
+            <div class="col-md-8">
+              <%= f.text_area :description, placeholder: 'Genre origins, description, facts etc', class: 'form-control' %>
+            </div>
+          </div>
+
+          <div class="actions">
+
+            <%= f.submit class: 'btn btn-success' %>
+
+          </div>
+
+
+    <% end %>
+    </div>
+
+
+  </div>
+</div>
+
+
+

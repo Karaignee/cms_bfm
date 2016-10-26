@@ -1,0 +1,48 @@
+<div class="container">
+  <div class="row">
+    <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9 col-centered-packery">
+      <div class="row">
+		
+		<div id="packery-gear-container">		
+
+			<% @gear_pages.each do |gear_page| %>
+				
+				<div class="packery-gear-item bourbon-packery-gear-card ">
+					<div class="packery-item-overlay">
+		       		    <div class="article-image-gear-container">
+		                  <%= link_to (image_tag gear_page.profile_image.url(:medium)), gear_page %>
+		                </div>
+			    	    <div class="gear-title">
+			          		<%= link_to (gear_page.name), gear_page %>
+			       	    </div>
+			       		<div class="gear-subtitle">
+			       			<%= gear_page.description.truncate(100) %>
+			       		</div>
+			       		<div class="article-bookmark">
+                  			<%= link_to image_tag("../assets/bookmark.png", :alt => "comments", :width => 15, :height => 20) %>
+                		</div>
+			        </div>
+				</div>
+				 
+			<% end %>
+				
+		</div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+
+jQuery(document).ready(function($) {
+    var $container = $('#packery-gear-container');
+    imagesLoaded( $container, function() {
+        $container.packery({
+            itemSelector: '.packery-gear-item',
+ 			gutter: 10,
+        });
+    });
+});
+
+</script>

@@ -1,0 +1,25 @@
+   <div class="row">
+     <div class="col-md-6">
+      <p class="profile-name">
+        Genre:   <%= @genre.name %>
+      </p>
+
+      <p class="gear-profile-image">
+          <%= image_tag @genre.profile_image.url(:medium) %>
+      </p>
+
+      <p class="gear-profile-image">
+      	Related Gear:  coming soon 
+      	<%#= @genre.gear_page.try(:name) %>
+       </p>
+     
+     </div>    
+
+      <div class="col-md-6">
+      <p class="profile-name">
+          <%= @genre.description %>
+      </p>
+     </div>
+
+  
+   </div>

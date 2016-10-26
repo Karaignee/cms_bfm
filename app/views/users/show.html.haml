@@ -1,0 +1,82 @@
+.row
+  .col-md-12
+    .page-header
+      %h1
+        User
+        =@user.id
+.row
+  .col-md-12
+    %table.table.table-bordered.table-striped
+      %tr
+        %th Name:
+        %td=@user.full_name
+      %tr
+        %th Email:
+        %td=@user.email
+      %tr
+        %th Country:
+        %td
+          -if current_user.admin?
+            =link_to @user.country.try(:name), @user.try(:country) || '#'
+          -else
+            =@user.country.try(:name)
+      %tr
+        %th Location:
+        %td=@user.location
+      %tr
+        %th Time Zone:
+        %td=@user.time_zone
+      %tr
+        %th Tags:
+        %td
+          -@user.tags.to_s.split(',').each do |tag|
+            =link_to(tag.strip, welcome_people_url(tag: tag.strip), title: 'See people that use this tag', class: 'btn btn-xs btn-success')
+      %tr
+        %th User group:
+        %td
+          -if current_user.admin?
+            =link_to @user.user_group.name, @user.user_group
+          -else
+            =@user.user_group.name
+      %tr
+        %th Active:
+        %td=@user.active ? 'Yes' : 'No'
+      %tr
+        %th Allow email alerts:
+        %td=@user.allow_email_alerts ? 'Yes' : 'No'
+      %tr
+        %th Url code (to your public profile):
+        %td=link_to @user.url_code, profile_url(url_code: @user.url_code)
+      %tr
+        %th Registered:
+        %td=@user.created_at.to_s(:standard)
+      %tr
+        %th Invites to new users:
+        %td
+          =@user.user_group.limit_user_invites_for_this_group ? "You have #{pluralize(@user.remaining_invites, 'invites')} left" : 'Unlimited invites'
+          -@user.user_invites.each do |invite|
+            %br/
+            -if invite.closed?
+              =link_to invite.invitee_user.full_name, profile_url(invite.invitee_user.url_code), title: "click to view the user's Bourbon profile"
+            -elsif invite.stale?
+              .text-muted{title: 'Their invite has expired'}=invite.email
+            -elsif invite.still_open?
+              =invite.first_name + ' (' + invite.email + ')'
+              -if invite.emails_sent < 3
+                =link_to 're-send', user_invite_re_send_url(invite.activation_code)
+          -if !@user.user_group.limit_user_invites_for_this_group || @user.remaining_invites > 0
+            %br/
+            -@user_invite = UserInvite.new(user_id: @user.id)
+            =render partial: 'shared/modal_wrapper', locals: {the_form: 'user_invites/form', btn_label: 'Send a New Invite', target_id: 'new_invite_modal', public_title: 'Invite a friend to Bourbon'}
+
+    -if current_user.id == @user.id
+      %p=render partial: 'shared/modal_wrapper', locals: {the_form: 'users/change_password', btn_label: 'Change Password', target_id: "password_modal_#{@user.id}", public_title: 'Change Your Password'}
+
+  .col-md-12
+    %p
+      -if current_user.admin?
+        =link_to 'Back', users_path
+      -else
+        =link_to 'Back', root_url
+      \|
+      =link_to 'Edit', edit_user_path(@user)

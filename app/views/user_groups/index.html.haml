@@ -1,0 +1,32 @@
+.row
+  .col-md-12
+    .page-header
+      %h1 User Groups
+
+.row
+  .col-md-12
+    %table.table.table-bordered.table-striped
+      %tr
+        %th Name
+        %th Description
+        %th Admin?
+        %th Curator?
+        %th Contributor?
+        %th Invites
+        %th Users
+      -@user_groups.each do |user_group|
+        %tr
+          %td=link_to user_group.name, user_group
+          %td=user_group.description
+          %td=user_group.is_admin ? 'Yes' : '--'
+          %td=user_group.is_curator ? 'Yes' : '--'
+          %td=user_group.is_contributor ? 'Yes' : '--'
+          %td
+            -if user_group.limit_user_invites_for_this_group
+              =user_group.invites_limit_per_user
+            -else
+              &infin;
+          %td=user_group.users.size
+.row
+  .col-md-12
+    =link_to 'New', new_user_group_path, class: 'btn btn-success'

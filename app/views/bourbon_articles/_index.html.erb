@@ -1,0 +1,46 @@
+
+<div class="container">
+  <div class="row">
+    <div class="col-xs-10 col-sm-10 col-md-10 col-lg-9 col-centered-packery">
+      <div class="row">
+      	<table border="1" style="width:100%">
+		  <tr>
+		  	<th>Image</th>
+		    <th>Title</th>
+		    <th>Subtitle</th> 
+		    <th>Author</th>
+		    <th>Date Updated</th>
+		    <th>Review</th>
+		    <th>Delete</th>
+		  </tr>
+		  <% @bourbon_articles.each do |bourbon_article| %>
+		  <tr>
+            <% if bourbon_article.image %>
+		  	    <td><%= link_to(image_tag(bourbon_article.image.upload.url, :style => 'width:160px;height:120px' ), story_path(bourbon_article.clickable_title), title: bourbon_article.article_title.titleize) %></td>
+		    <% end %>
+            <td><%= link_to bourbon_article.article_title.upcase.truncate(50), story_path(bourbon_article.clickable_title), title: bourbon_article.article_title.titleize %></td>
+		    <td><%= link_to(bourbon_article.article_subtitle.upcase.truncate(40), story_path(bourbon_article.clickable_title), title: bourbon_article.article_title.titleize) %></td>
+		    <td><%= link_to bourbon_article.contributor.full_name, profile_url(bourbon_article.contributor.url_code) %></td>
+		    <td><%= bourbon_article.updated_at.to_s(:standard) %></td>
+		    <td>
+		    	<% if current_user.contributor? && bourbon_article.ready_for_curation != true %>
+				  <%= link_to 'Edit', edit_story_url(bourbon_article), class: 'btn btn-default dashboard-btn' %>
+				<% elsif current_user.admin? && bourbon_article.ready_for_curation && !bourbon_article.visible %>
+				  <%= link_to 'Review', story_url(bourbon_article), class: 'btn btn-default dashboard-btn' %>
+				<% else %>
+				  <%= link_to 'View', story_url(bourbon_article), class: 'btn btn-default dashboard-btn' %>
+				<% end %> 
+		    </td>
+		    <td>
+		    	<% if bourbon_article.destroyable? %>
+		    	<%= link_to 'Delete', story_url(bourbon_article), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-xs btn-danger' %> 
+		    	<% end %>
+		    </td>
+		  </tr>
+		  <% end %>
+		</table>
+      </div>
+    </div>
+  </div>
+</div>
+      

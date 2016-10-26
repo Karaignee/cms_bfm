@@ -1,0 +1,41 @@
+<div class="row">
+ <div class="col-md-6">
+  <p class="profile-name">
+    Brand name:   <%= @brand.name %>
+  </p>
+
+  <p class="gear-profile-image">
+      <%= image_tag @brand.profile_image.url(:medium) %>
+  </p>
+
+  <p class="gear-profile-image">
+    Related Gear:  coming soon 
+    <%#= @brand.gear_page.try(:name) %>
+   </p>
+ 
+ </div>    
+
+  <div class="col-md-6">
+  <p class="profile-name">
+      <%= @brand.description %>
+  </p>
+ </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-8 col-sm-offset-2">
+      <p>
+        <%= link_to 'Home', root_url %>
+      </p>
+    </div> 
+    <div class="col-sm-8 col-sm-offset-2">
+      <p>
+        <%= link_to 'All brands', brands_url %>
+      </p>
+    </div> 
+    <div class="col-sm-8 col-sm-offset-2">
+      <p>
+        <%= link_to 'Edit', edit_brand_url %>
+      </p>
+    </div>
+  </div>

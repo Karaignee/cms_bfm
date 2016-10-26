@@ -1,0 +1,23 @@
+!!! 5
+%html{lang: 'en'}
+  %head
+    %title Bourbon FM
+    -#%style{type: 'text/css', media: 'screen'}
+    :css
+      body
+        background-color: #eee;
+        color: #222;
+        margin: 0;
+        padding: 20px;
+        font-family: 'helvetica neue', helvetica, sans-serif;
+
+      h1
+        font-weight: 100;
+        text-shadow: 2px 2px 4px #000;
+
+      h2
+        font-weight: 100;
+        text-shadow: 2px 2px 4px #000;
+
+  %body
+    =yield

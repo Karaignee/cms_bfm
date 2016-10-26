@@ -1,0 +1,114 @@
+-# call this modal with the following:
+  =render partial: 'media_uploads/chooser_uploader_modal', locals: {allowed_types: %w(image audio video)}
+  
+.modal.fade#chooser_uploader_modal{tabindex: -1, role: 'dialog', aria: {labelledby: 'chooserUploaderModalLabel', hidden: true}}
+  .modal-dialog.modal-lg
+    .modal-content
+      .modal-header
+        %button{type: 'button', class: 'close', data: {dismiss: 'modal'}, aria: {hidden: true}} &times;
+        %h4.modal-title#chooserUploaderModalLabel Insert a Media Item
+
+      .modal-body
+        .row
+          .col-md-12
+            %ul.nav.nav-tabs
+              -allowed_types.each do |this_type|
+                %li.active
+                  %a{data: {toggle:'tab'}, href: '#library_chooser'}
+                    Choose an
+                    =this_type.upcase
+                %a{data: {toggle:'tab'}, href: '#library_chooser'} Click on an image to choose it
+              %li
+                %a{data: {toggle:'tab'}, href: '#image_uploader'} Upload Something
+
+        .tab-content
+          .tab-pane.active.fade.in#library_chooser
+            .row{style: 'max-height: 500px; overflow:auto; overflow-x: hidden;'}
+              .col-sm-10.col-sm-offset-1
+                &nbsp;
+                -MediaUpload.just_images.available_for(current_user.id).each do |image|
+                  .well.well-sm{onclick: "chooseThisImage(#{image.id},'" + image.upload.try(:url).to_s + "', " + image.make_text_bright.to_s + ');'}
+                    .row
+                      .col-sm-2=image_tag(image.upload.url(:thumb))
+                      .col-sm-10
+                        %strong=image.description
+                        %br/
+                        Tags:
+                        -image.tags.split(',').each do |tag|
+                          .label.label-default=tag
+                        %br/
+                        Alt Text:
+                        =image.alt_tag
+
+            .modal-footer
+              =link_to 'Close', '#', class: 'btn btn-success', data: {dismiss: 'modal'}
+
+          .tab-pane.fade#image_uploader
+            .row
+            =form_for(MediaUpload.new(publicly_available: true), authenticity_token: true, data: {type: :json}, html: {remote: true, multipart: true, class: 'form-horizontal', role: 'form'}) do |f|
+              =f.hidden_field :media_type, value: 'image'
+              %br/
+              .form-group
+                .col-md-8.col-md-offset-2
+                  #image_uploader_error.text-center.alert.alert-danger.hidden
+              .form-group
+                =f.label :description, class: 'control-label col-md-4'
+                .col-md-8
+                  =f.text_field :description, placeholder: 'General description (internal use)', class: 'form-control', required: true
+              .form-group
+                =f.label :tags, class: 'control-label col-md-4'
+                .col-md-8
+                  =f.text_field :tags, placeholder: 'Enter tags, separated by commas',class: 'form-control', required: true
+              .form-group
+                =f.label :alt_tag, 'Tooltip text', class: 'control-label col-md-4'
+                .col-md-8
+                  =f.text_field :alt_tag, placeholder: 'Brief description - tooltip / spoken to vision impaired people', class: 'form-control', required: true
+              .form-group
+                .col-md-8.col-md-offset-4
+                  .checkbox
+                    =f.label :publicly_available, 'Other contributors can use this upload'
+                    =f.check_box :publicly_available
+              .form-group
+                .col-md-8.col-md-offset-4
+                  .checkbox
+                    =f.label :make_text_bright, 'Show text in light colour'
+                    =f.check_box :make_text_bright
+              .form-group
+                =f.label :upload, class: 'control-label col-md-4'
+                .col-md-8
+                  =f.file_field :upload, class: 'form-control', required: true
+
+            .modal-footer
+              =link_to 'Close', '#', class: 'btn btn-default', data: {dismiss: 'modal'}
+              %button.btn.btn-success{type: 'submit', form: 'new_media_upload', onclick: "$('#image_uploader_error').text('').hide();"} Save
+
+
+:javascript
+
+  $(document).on('ready page:load', function() {
+    $("#new_media_upload").on("ajax:success", function(e, response, status, xhr) {
+      console.log('Success response');
+      $("#bourbon_article_image_id").val( response.id );
+      $(".jumbotron").attr("style", "background: #fff url('" + response.url + "') no-repeat center center;");
+      $("#chooser_uploader_modal").modal('hide');
+      if (response.light_text == true) {
+        $(".jumbotron textarea, .jumbotron p").css('color', "#eee");
+      } else {
+        $(".jumbotron textarea, .jumbotron p").css('color', 'inherit');
+      }
+    }).on("ajax:error", function(e, xhr, status, error) {
+      console.log('Error response');
+      $("#image_uploader_error").text("Your image was not uploaded: " + xhr.responseJSON.error );
+      $("#image_uploader_error").removeClass('hidden').show();
+    });
+  })
+
+  function chooseThisImage(image_id, image_url, use_light_text) {
+    $("#bourbon_article_image_id").val( image_id );
+    $(".jumbotron").attr("style", "background: #fff url('" + image_url + "') no-repeat center center;");
+    if (use_light_text == true) {
+      $(".jumbotron textarea, .jumbotron p").css('color', "#eee");
+    } else {
+      $(".jumbotron textarea, .jumbotron p").css('color', 'inherit');
+    }
+  }

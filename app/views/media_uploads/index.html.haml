@@ -1,0 +1,98 @@
+.row
+  .col-md-12
+    .page-header
+      %h1 Media Uploads
+
+.row
+  .col-md-12
+    %ul.nav.nav-tabs
+      %li.active
+        %a{data: {toggle:'tab'}, href: '#image_table'} Images
+      %li
+        %a{data: {toggle:'tab'}, href: '#audio_table'} Audio
+      %li
+        %a{data: {toggle:'tab'}, href: '#video_table'} Video
+
+    %br/
+    %p=link_to 'New Upload', new_media_upload_url, class: 'btn btn-success'
+
+    .tab-content
+      .tab-pane.active.fade.in#image_table
+        %table.table.table-striped.table-bordered
+          %tr
+            %th Thumb
+            %th Description / Tags / Filename
+            %th User
+            %th
+          -@media_uploads.just_images.each do |upload|
+            %tr
+              %td
+                -if upload.media_type == 'image'
+                  =link_to(image_tag(upload.upload.url(:thumb)), upload)
+              %td
+                =upload.description
+                %br/
+                -upload.tags.split(',').each do |tag|
+                  .label.label-default=tag
+                %br/
+                %span.muted=upload.upload_file_name
+                -if upload.publicly_available
+                  %span.label.label-success Public
+                -else
+                  %span.label.label-warning Private
+              %td=link_to upload.user.full_name, profile_url(upload.user.url_code)
+              %td
+                -if upload.publicly_available || upload.user_id == current_user.id || (current_user.admin? || current_user.curator?)
+                  =link_to 'View', upload
+                  =link_to 'Edit', edit_media_upload_url(upload)
+                  -if upload.destroyable?
+                    =link_to 'Delete', upload, method: :delete, data: {confirm: 'Are you sure you want to delete this upload?'}, class: 'btn btn-danger btn-xs'
+
+      .tab-pane.fade#audio_table
+        %table.table.table-striped.table-bordered
+          %tr
+            %th Description / Tags / Filename
+            %th User
+            %th
+          -@media_uploads.just_audio.each do |upload|
+            %tr
+              %td
+                %audio{controls: 'controls'}
+                  %source{src: upload.upload.url, type: upload.upload_content_type}
+                  Your browser does not support audio playback
+
+                %br/
+                =upload.description
+                %br/
+                -upload.tags.split(',').each do |tag|
+                  .label.label-default=tag
+                %br/
+                %span.muted=upload.upload_file_name
+              %td=link_to upload.user.full_name, profile_url(upload.user.url_code)
+              %td
+                =link_to 'View', upload
+                =link_to 'Edit', edit_media_upload_url(upload)
+                -if upload.destroyable?
+                  =link_to 'Delete', upload, method: :delete, data: {confirm: 'Are you sure you want to delete this upload?'}, class: 'btn btn-danger btn-xs'
+
+      .tab-pane.fade#video_table
+        %table.table.table-striped.table-bordered
+          %tr
+            %th Description / Tags / Filename
+            %th User
+            %th
+          -@media_uploads.just_video.each do |upload|
+            %tr
+              %td
+                =upload.description
+                %br/
+                -upload.tags.split(',').each do |tag|
+                  .label.label-default=tag
+                %br/
+                %span.muted=upload.upload_file_name
+              %td=link_to upload.user.full_name, profile_url(upload.user.url_code)
+              %td
+                =link_to 'View', upload
+                =link_to 'Edit', edit_media_upload_url(upload)
+                -if upload.destroyable?
+                  =link_to 'Delete', upload, method: :delete, data: {confirm: 'Are you sure you want to delete this upload?'}, class: 'btn btn-danger btn-xs'

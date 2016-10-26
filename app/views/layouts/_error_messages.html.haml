@@ -1,0 +1,12 @@
+-if thing.errors.any?
+  .container
+    .panel.panel-danger
+      .panel-heading
+        =pluralize(thing.errors.count, 'error')
+        =message || 'prevented you from saving:'
+
+      .panel-body
+        %ul
+          -thing.errors.full_messages.each do |msg|
+            %li
+              =msg

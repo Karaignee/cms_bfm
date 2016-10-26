@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<!-- Codebase Copyright © 2015, Bourbon.fm. All rights reserved. -->
+	<% if @page_title %>
+	  <title>
+	    <%= @page_title %>
+	  </title>
+	<% else %>
+	  <title>Bourbon.fm - Discover Your Sound</title>
+	<% end %>
+	<% if @seo_tcd %>
+	  <% @seo_tags.each do |seo_tag| %>
+	    <meta content="<%= seo_tag[:tag_value] %>" name="<%= seo_tag[:tag_name] %>"/>
+	  <% end %>
+	<% end %>
+	<link href="/favicon.ico?v=3" rel="shortcut icon"></link>
+	<!--[if lt IE 9]>
+		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+		<script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+	<![endif]-->
+	<!-- %link{rel: 'stylesheet', href: '//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.css'} -->
+	<%= stylesheet_link_tag    'application', media: 'all' %>
+	<%= javascript_include_tag 'application' %>
+	<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.7.0/moment.min.js"></script>
+	<script src="//cdn.jsdelivr.net/bootstrap.datetimepicker/3.0.0/js/bootstrap-datetimepicker.min.js"></script>
+	<link href="//netdna.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.css" rel="stylesheet"></link>
+	<link href="//fonts.googleapis.com/css?family=Lato:400,700|Droid+Serif:400,700,400italic,700italic" rel="stylesheet"></link>
+	<link href="//fonts.googleapis.com/css?family=Oswald:400,700|Droid+Serif:400,700,400italic,700italic" rel="stylesheet"></link>
+	<link href="//cdn.jsdelivr.net/bootstrap.datetimepicker/3.0.0/css/bootstrap-datetimepicker.min.css" rel="stylesheet"></link>
+
+
+
+	<!--<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.css" rel="stylesheet"></link>-->
+	<!--<%= stylesheet_link_tag('http://sarahjunefox.com/bourbon/bourbon-style.css') %> -->
+	<script src="//load.sumome.com/" data-sumo-site-id="036cb2a02f5947f1f403bbcf5be63c483844e07314b49d44e63a16f84628ff76" async="async"></script> 
+	<!--<script src="http://use.typekit.net/xrc2iva.js" type="text/javascript"></script>-->
+	<script type="text/javascript">
+  		try{Typekit.load();}catch(e){}
+	</script>
+	<%= csrf_meta_tags %>
+	<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+	<%= render partial: 'layouts/analytics' if Rails.env.production? %>
+</head>
+
+<body class="<%= @special_body_class ? @special_body_class : '' %>">
+  <div id="fb-root"></div>
+  <%= render partial: 'layouts/main_navbar' %>
+
+<!--<%# if Rails.env.development? todo: %>
+	  <div class="row">
+	    <%# cookies.sort.each do |cookie| %>
+	      <div class="col-md-3 well">
+	        <%#= cookie[0] %>
+	        <br/>
+	        \=
+	        <%#= cookie[1][0..19] %>
+	      </div>
+	    <%# end %>
+	  </div>
+	<%# end %> -->
+
+  <% if @special_body_class == 'bfm-story' %>
+
+ 	 <%= yield :jumbotron %>
+ 	 
+ 	 <style>
+ 	 	.top-padding{display:none;}
+ 	 </style>
+
+  <% elsif @special_body_class == 'bfm-story-form' %>
+
+ 	 <%= yield :jumbotron %>
+
+  <% elsif @special_body_class == 'bfm-profile' || @special_body_class == 'bfm-gear-show' || @special_body_class == 'video-show' %>
+
+ 	 <%= yield :jumbotron %>
+ 	 
+ 	 <style>
+ 	 	.top-padding{display:none;}
+ 	 </style>
+
+  <% elsif @special_body_class == 'bfm-homepage' || @special_body_class == 'bfm-sign-in' || @special_body_class == 'bfm-sign-up' %>
+
+   	     <!-- Page Header -->
+    <!--carousel --><!-- Header Carousel -->
+    <header id="myCarousel" class="carousel slide">
+
+    	<div class="bourbon_main_logo"><%= image_tag "bourbon_home_image_white.png"%></div>
+
+        <!-- Email Signup --------------------------->
+	    <div class="email">
+	    	<div class="container" style="padding-bottom:10px;">
+	    		<div class="row">
+	        		<div class="[ col-lg-12 col-md-12 col-sm-12 col-xs-12 text-left ]" style="padding-top:45px; max-height: 70px;">
+						<div id="optin">
+							<form id="email_submit_form" action="http://bourbon.us9.list-manage.com/subscribe/post?u=532337f0c263d14c71ee930c8&amp;id=b4550c2aa7" method="post" name="0.1_mc-embedded-subscribe-form" target="_blank" onsubmit="return window.confirm(&quot;You are submitting information to an external page.\nAre you sure?&quot;);">
+							<input type="text" size="30" value="Your Name" placeholder="Your Name" name="FNAME" class="name" id="mce-FNAME" onfocus="if(this.value==this.defaultValue)this.value='';" onblur="if(this.value=='')this.value=this.defaultValue;">
+							<input type="email" size="30" value="Email Address" placeholder="Email Address" name="EMAIL" class="required email" id="mce-EMAIL" onfocus="if(this.value==this.defaultValue)this.value='';" onblur="if(this.value=='')this.value=this.defaultValue;">
+								<div class="clear">
+									<div style="position:absolute;left:-5000px"><input type="text" name="b_532337f0c263d14c71ee930c8_b4550c2aa7" value=""></div>
+										<input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button">
+								</div>
+							</form>
+						</div>
+	    			</div>
+	    		</div>
+	    	</div>
+	    </div>
+        
+        <!-- Indicators 
+        <ol class="carousel-indicators">
+            <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+            <li data-target="#myCarousel" data-slide-to="1"></li>
+            <li data-target="#myCarousel" data-slide-to="2"></li>
+        </ol> -->
+
+        <!-- Wrapper for slides -->
+        <div class="carousel-inner">
+            <div class="item active">
+                <div class="fill" style="background-image:url('<%= image_url "slider_image1.png" %>');"></div>
+                <div class="carousel-caption">
+
+                </div>
+            </div>
+            <div class="item">
+                <div class="fill" style="background-image:url('<%= image_url "slider_image2.png" %>');"></div>
+                <div class="carousel-caption">
+
+                </div>
+            </div>
+            <div class="item">
+                <div class="fill" style="background-image:url('<%= image_url "slider_image3.png" %>');"></div>
+                <div class="carousel-caption">
+
+                </div>
+            </div>
+        </div>
+
+
+
+        <!-- Controls -->
+        <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+            <span class="icon-prev"></span>
+        </a>
+        <a class="right carousel-control" href="#myCarousel" data-slide="next">
+            <span class="icon-next"></span>
+        </a>
+    </header>
+
+  <% end %>
+
+    <div class="top-padding"></div>
+
+    <%= render partial: '/layouts/flash_messages' %>
+
+
+        <%= yield %>
+
+    <div class="top-padding"></div>
+
+<!-- <%# cookie-holder %>
+     <%# =render partial: '/layouts/cookies_policy' %> -->
+
+
+<%= render partial: 'layouts/footer' %>
+<%#= render partial: 'layouts/intercom' if current_user %>
+<%#= render partial: 'layouts/wripl' if current_user %>
+
+
+<!-- Script to Activate the Carousel -->
+    <script>
+        $('.carousel').carousel({
+            interval: 5000 //changes the speed
+        })
+	</script>
+
+    <script>
+
+    	jQuery(window).scroll(function(){
+    		var fromTopPx = 1; // distance to trigger
+    		var scrolledFromtop = jQuery(window).scrollTop();
+    		if(scrolledFromtop > fromTopPx){
+        		jQuery('a.navbar-brand').addClass('scrolled');
+    		}else{
+        		jQuery('a.navbar-brand').removeClass('scrolled');
+    		}
+    	});
+
+    	jQuery(document).ready(function ($) {
+        	$('#tabs').tab();
+    	});
+
+	</script>
+
+
+</body>
+
+</html>

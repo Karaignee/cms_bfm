@@ -1,0 +1,8 @@
+<ul>
+	<% gear_pages.each do |gear_page, children| %>
+	<li>
+		<%= link_to_unless_current gear_page.name, gear_page %>
+		<%= render 'submenu_pages', gear_pages: children if children.present? %>
+	</li>
+	<% end %>
+</ul>

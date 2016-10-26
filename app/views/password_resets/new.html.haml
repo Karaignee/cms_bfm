@@ -1,0 +1,13 @@
+.row
+  .col-sm-12
+    .page-header
+      %h1 Reset your password
+.row
+  .col-sm-6.col-sm-offset-3
+    .well.well-sm
+      =form_tag(password_resets_path, html: {class: 'form', role: 'form'}) do
+        .form-group
+          =label_tag :email, 'Enter your email address and we will reset your password:'
+          =email_field_tag :email, nil, placeholder: 'jimi@example.com', autofocus: true, class: 'form-control'
+        .form-group
+          =submit_tag 'Send', class: 'btn btn-success'

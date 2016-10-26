@@ -1,0 +1,130 @@
+<div class="container" style="padding:0px !important;margin:0px !important;height:100%;width:100%">
+  <div class="jumbotron jumbotron-profile" style="background: #000 url('http://sandybourbonfm.s3-eu-west-1.amazonaws.com/development/media_uploads/2/original/slider_image3.png?1424488859') no-repeat !important;background-size:cover !important;color: #eee;">
+    <div class="container basic-info">
+      <div class="col-sm-12 col-basic-info">
+        <p class="gear-profile-image">
+          <%= image_tag @gear_page.profile_image.url(:medium) %>
+          <%#= user_image(@user, size: 170) %>
+        </p>
+        <p class="profile-name">
+          <%= @gear_page.name %>
+        </p>
+        <div class="profile-group">
+	        <p class="profile-brand">
+	          <%= @gear_page.brand.try(:name) %>
+	        </p>
+	        <p class="profile-model">
+	          Model Name
+	        </p>
+	        <p class="profile-description">
+            <%= @gear_page.description %>
+            </p> 
+            <% if current_user.try(:admin?) %>
+	        <p><%= link_to 'Edit', edit_gear_page_path(@gear_page) %></p>
+			<p><%= link_to 'Back', gear_pages_path %></p> 
+			<%end%>
+	    </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  <div class="container container-top-padding">
+	<div class="col-xs-8 col-xs-offset-3 col-sm-8 col-sm-offset-3 col-lg-8 col-lg-offset-3">
+      <div class="row">
+      	<ul class='tabs profile-tabs'>
+      	  <li><a href='#tab1'><b class="profile-counter"><i class="fa fa-info fa-info-tab"></i></b><br/>OVERVIEW</a></li>
+    	  <li><a href='#tab2'><b class="profile-counter">39</b><br/>LISTINGS</a></li>
+   		  <li><a href='#tab3'><b class="profile-counter">25</b><br/>STORIES</a></li>
+    	  <li><a href='#tab4'><b class="profile-counter">92</b><br/>VIDEOS</a></li>
+    	  <li><a href='#tab5'><b class="profile-counter">23</b><br/>COLLECTIONS</a></li>
+  		</ul>
+		  <div id='tab1'>
+				    <div class="row">
+				    	<div class=" col-xs-12 col-sm-12 col-md-12 col-width-110">
+			        	    <div class="gear-show-cards">
+	       						  <%= image_tag @gear_page.profile_image.url(:medium), :width => 232 %>
+								  </br>
+								  </br>
+								  <%= @gear_page.description.truncate(100) %>
+							</div>
+	   						<div class="gear-show-cards">
+	   							 <%= image_tag @gear_page.profile_image.url(:medium), :width => 232 %>
+	   							 </br>
+								 </br>
+           					 	 Related Artists: <%= @gear_page.artist.try(:name) %>
+	   						</div>
+	   						<div class="gear-show-card-video">
+	       						<%= link_to image_tag("../assets/video_still.jpg", :alt => "video", :width => 280, :height => 187) %>
+								</br>
+								</br>
+	   						</div>
+   						</div>
+		      		</div>
+		  </div>
+		  <div id='tab2'>
+		    <p>This tab will have listings.</p>
+		  </div>
+		  <div id='tab3'>
+		    <p>This tab will have stories.</p>
+		  </div>
+		  <div id='tab4'>
+		    <p>This tab will have videos.</p>
+		  </div>
+		  <div id='tab5'>
+		    <p>This tab will have collections.</p>
+		  </div>
+      </div>
+    </div>
+  </div>
+
+
+<!--
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12">
+      <%#= link_to 'people', welcome_people_url %>
+    </div>
+  </div>
+</div> -->
+
+<script>
+	
+$('ul.tabs').each(function(){
+    // For each set of tabs, we want to keep track of
+    // which tab is active and it's associated content
+    var $active, $content, $links = $(this).find('a');
+
+    // If the location.hash matches one of the links, use that as the active tab.
+    // If no match is found, use the first link as the initial active tab.
+    $active = $($links.filter('[href="'+location.hash+'"]')[0] || $links[0]);
+    $active.addClass('active');
+
+    $content = $($active[0].hash);
+
+    // Hide the remaining content
+    $links.not($active).each(function () {
+      $(this.hash).hide();
+    });
+
+    // Bind the click event handler
+    $(this).on('click', 'a', function(e){
+      // Make the old tab inactive.
+      $active.removeClass('active');
+      $content.hide();
+
+      // Update the variables with the new link and content
+      $active = $(this);
+      $content = $(this.hash);
+
+      // Make the tab active.
+      $active.addClass('active');
+      $content.show();
+
+      // Prevent the anchor's default click action
+      e.preventDefault();
+    });
+  });
+</script>
+

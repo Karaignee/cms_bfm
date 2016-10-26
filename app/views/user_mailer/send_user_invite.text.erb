@@ -1,0 +1,14 @@
+Come Join Bourbon.fm
+====================
+
+Hi <%= @user_invite.first_name.titleize %>,
+
+Your friend <%= @user_invite.user.full_name %> has asked us to invite you to come join bourbon.fm.  To accept our invite, click this link and create a profile:
+
+  <%= @server_name %>/user_invite/activate/<%= @user_invite.activation_code %>
+
+Cheers,
+
+
+Tom
+<%= @server_name %>

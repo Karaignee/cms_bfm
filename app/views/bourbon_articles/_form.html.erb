@@ -1,0 +1,156 @@
+
+
+
+<%= content_for :jumbotron do %>
+    <div class="container" style="padding:0px !important;margin:0px !important;min-height:100%;width:100%">
+      <%= render partial: 'bourbon_articles/banner_image_modal' %>
+      <%= form_for(@bourbon_article, url: (@bourbon_article.new_record? ? stories_url : story_url(@bourbon_article.id)), html: {method: (@bourbon_article.new_record? ? :post : :patch), class: 'form-horizontal', role: 'form', multipart: true, :id => 'article_form'}) do |f| %>
+          <%= render partial: '/layouts/error_messages', locals: {thing: @bourbon_article, message: nil} %>
+          <div class="jumbotron text-center" style="<%= (@bourbon_article.image ? "background: #000 url('" + @bourbon_article.image.try(:upload).try(:url).to_s + "') no-repeat center center !important;background-size:cover !important;" : '') + @bourbon_article.image.try(:text_style).to_s %>">
+
+          <div class="container article-heading-container container-no-margin">
+  			<div class="bourbon_article_container">
+              <div class="show-article-title">
+                <%= f.text_area :article_title, placeholder: 'Title...', class: 'form-control autosize-me', required: true, rows: 1, style: @bourbon_article.image.try(:text_style).to_s, maxlength: 75 %>
+              </div>
+              <div class="show-article-subtitle">
+                <%= f.text_area :article_subtitle, placeholder: 'Subtitle ...', class: 'form-control autosize-me', rows: 2, style: @bourbon_article.image.try(:text_style), maxlength: 130 %>
+              </div>
+			  <div class="show-article-author" style="<%= @bourbon_article.image.try(:make_text_bright) ? 'color: #eee;' : '' %>">
+		          <%= user_image @bourbon_article.contributor, size: 45, class: 'img-circle' %>
+			      <%= link_to @bourbon_article.contributor.full_name, profile_url(@bourbon_article.contributor.url_code), style: 'padding-left:5px;' + (@bourbon_article.image.try(:make_text_bright) ? 'color: #eee !important;' : '#111;') %>
+			      <!-- <%#= render partial: 'shared/popover_bottom', locals: {the_title: @bourbon_article.contributor.full_name, image_url: user_image_url(@bourbon_article.contributor, size: 75)} %>
+				  <%# on %>
+				  <%#= @bourbon_article.article_published_at.to_s(:simple) %> -->
+			  </div>
+              <div class="upload_image">
+              	<i class="fa fa-picture-o upload-picture">
+              		<%= link_to image_tag('#', size: '40x40', title: 'set a background image'), '#', data: {toggle: 'modal', target: '#banner_image_modal'}, class: 'image-upload' %>
+             	</i>
+              </div>
+            </div>
+            <!-- end col-md-8 col-md-offset-2 -->
+          </div>
+          </div>
+      </div><!-- end container -->
+      
+          <div class="container container-no-margin">
+            <div class="bourbon-article-body">
+              <% #=link_to 'insert image', '', onclick: 'insertImageIntoTextArea(); return false;'    %>
+              <div class="form-group">
+                <div style="min-height: 400px;">
+                  <%= f.text_area :article_body, :id => 'article_body' %>
+                </div>
+              </div>
+
+              <%= f.hidden_field :image_id %>
+              <hr/>
+              <div class="form-group">
+                <%= f.label :tags, class: 'control-label col-md-6 new-story-label'  %>
+                <br />
+                <%= f.text_area :tags, placeholder: 'Enter tags or keywords for your story. Separate each tag with a comma.', class: 'form-control', maxlength: '255', onkeyup: "$('#tag_counter').text((255 - $('#bourbon_article_tags').val().length) +' characters left');" %>
+                <p class="muted" id="tag_counter"></p>
+              </div>
+              <% if current_user && current_user.curator? %>
+                  <div class="form-group">
+                    <%= f.label :article_published_at, 'Request a publish date', class: 'control-label col-md-6 new-story-label'  %>
+                    <br />
+                    <%= f.text_field :article_published_at, class: 'form-control datetimepicker', value: f.object.article_published_at.try(:to_s, :standard), data: {'date-format' => 'D MMMM YYYY h:mm A Z'}, title: 'Publish on/after this date' %>
+                  </div>
+                  <div class="publish-option">
+                    <%= link_to 'Publish as someone else', '', onclick: '$("#choose-contributor").removeClass("hide"); return false;' %>
+                  </div>
+                  <div class="form-group" id="choose-contributor">
+                    <div class="col-md-6 no-padding">
+                      <%= f.collection_select :contributor_id, @contributors, :id, :full_name, {}, {prompt: 'Select...', class: 'form-control', onchange: "$('#the_user_name').html($('#bourbon_article_contributor_id option:selected').text());"} %>
+                    </div>
+                  </div>
+              <% else %>
+                  <%= f.hidden_field :article_published_at %>
+                  <%= f.hidden_field :contributor_id %>
+              <% end %>
+
+      <% end %>
+<% end %>
+
+
+
+<div class="form-group">
+  <button onclick="submitArticleForm($('#article_form'))" class="btn btn-info">Save as Draft
+  </button>
+  <button onclick="submitArticleForm($('#article_form'))" class="btn btn-info">Submit for
+    Approval
+  </button>
+  <% if @bourbon_article.id %>
+      <%= link_to 'View', story_url(@bourbon_article.id), class: 'btn btn-default' %>
+  <% end %>
+  <%= link_to 'cancel', welcome_contributor_url, class: 'btn btn-default' %>
+</div>
+
+</div>
+</div>
+
+<script>
+
+    $(function () {
+        $('.datetimepicker').datetimepicker(
+        ).on('change', function() {
+                    $('#the_date').text( $('#bourbon_article_article_published_at').val().split(' ').slice(0,3).join(' ') )
+                });
+    });
+
+
+    $(document).on('ready', function () {
+        $("#article_body").editable({
+            inlineMode: false,
+            showNextToCursor: true,
+            height: 720,
+            buttons: ["bold", "italic", "underline", "strikeThrough", "fontSize",
+                "color", "formatBlock", "blockStyle", "align", "insertOrderedList", "insertUnorderedList", "outdent",
+                "indent", "selectAll", "createLink", "insertImage", "insertVideo", "table", "undo", "redo", "insertHorizontalRule", "uploadFile"],
+            // Colors list.
+            colors: [
+                '#15E67F', '#E3DE8C', '#D8A076',
+                '#D83762', '#76B6D8', 'REMOVE',
+                '#1C7A90', '#249CB8', '#4ABED9',
+                '#FBD75B', '#FBE571', '#FFFFFF'
+            ],
+            borderColor: "#ccc",
+
+            // How many colors on a line.
+            colorsStep: 6,
+            imageUploadToS3: {
+                bucket: 'bourbonmedia',
+                region: 's3',
+                keyStart: 'uploads/',
+                callback: function (url, key) {
+                    // The URL and Key returned from Amazon.
+                    console.log(url);
+                    console.log(key);
+                },
+                params: {
+                    acl: 'public-read', // ACL according to Amazon Documentation.
+                    AWSAccessKeyId: 'AKIAIIGQ3ZWFIXPZUMPA', // Access Key from Amazon.
+                    policy: '<%= s3_upload_policy_document %>', // Policy string computed in the backend.
+                    signature: '<%= s3_upload_signature %>'
+                }
+            }
+        });
+    })
+
+
+    function submitArticleForm(form) {
+        form.submit();
+    }
+
+
+
+    $('.autosize-me').autosize({append: ''});
+
+</script>
+
+<style>
+    .form-control {
+        border: 1px solid #000000;
+    }
+</style>

@@ -1,0 +1,63 @@
+.row
+  .col-md-12
+    %table.table.table-bordered.table-striped
+      %tr
+        %th Blocked:
+        %td=@user.blocked
+      %tr
+        %th Activation code:
+        %td=@user.activation_code
+      %tr
+        %th Activated at:
+        %td=@user.activated_at.try(:to_s, :standard)
+      %tr
+        %th Blocked by:
+        %td=@user.blocked_by
+      %tr
+        %th Password reset token:
+        %td=@user.password_reset_token
+      %tr
+        %th Password reset token requested at:
+        %td=@user.password_reset_token_requested_at.try(:to_s, :standard)
+      %tr
+        %th Password reset at:
+        %td=@user.password_reset_at.try(:to_s, :standard)
+      %tr
+        %th Crypted password:
+        %td=@user.crypted_password
+      %tr
+        %th Password salt:
+        %td=@user.password_salt
+      %tr
+        %th Perishable token:
+        %td=@user.perishable_token
+      %tr
+        %th Persistence token:
+        %td=@user.persistence_token
+      %tr
+        %th Single access token:
+        %td=@user.single_access_token
+      %tr
+        %th Login count:
+        %td=@user.login_count
+      %tr
+        %th Failed login count:
+        %td=@user.failed_login_count
+      %tr
+        %th Last request at:
+        %td=@user.last_request_at.try(:to_s, :standard)
+      %tr
+        %th Current login at:
+        %td=@user.current_login_at.try(:to_s, :standard)
+      %tr
+        %th Last login at:
+        %td=@user.last_login_at.try(:to_s, :standard)
+      %tr
+        %th Current login ip:
+        %td=@user.current_login_ip
+      %tr
+        %th Last login ip:
+        %td=@user.last_login_ip
+      %tr
+        %th Active:
+        %td=@user.active

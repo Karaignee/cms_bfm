@@ -1,0 +1,68 @@
+%nav.navbar.navbar-inverse.navbar-default{role: 'navigation'}
+  .navbar-header
+    %button{type: 'button', class: 'navbar-toggle', data: {toggle: 'collapse', target: '.navbar-collapse'} }
+      %span{class: 'sr-only'} Toggle navigation
+      %span{class: 'icon-bar'}
+      %span{class: 'icon-bar'}
+      %span{class: 'icon-bar'}
+    -#=link_to 'Bourbon FM', root_url, class: 'navbar-brand'
+    -if content_for?(:jumbotron)
+      -if @bourbon_article && @bourbon_article.try(:image).try(:make_text_bright)
+        =link_to image_tag('Single_B-white.png'), root_url, class: 'navbar-brand'
+      -else
+        =link_to image_tag('Single_B-black.png'), root_url, class: 'navbar-brand'
+    -else
+      =link_to image_tag('Single_B-black.png'), root_url, class: 'navbar-brand'
+
+
+  .collapse.navbar-collapse.navbar-collapse
+    -#%ul.nav.navbar-nav.global-nav
+      %li
+        =link_to 'Stories', stories_path
+      %li
+        =link_to 'People', welcome_people_url
+      %li
+        =link_to 'Collections', welcome_collections_url
+
+      -#%li
+        .navbar-form.navbar-left{role: 'search'}
+          =form_tag(search_request_url, class: 'navbar-form.navbar-left', role: 'search', id: 'search') do
+            .form-group
+              =text_field_tag :search_for_this, nil, placeholder: 'search...', class: 'form-control'
+
+
+    %ul.nav.navbar-nav.navbar-right
+      -if current_user
+        %li
+          -if current_user.contributor?
+            =link_to 'Write a story', new_story_url, class: 'btn btn-success'
+          -#=link_to "<span class='glyphicon glyphicon-pencil'></span>".html_safe, new_story_url, title: 'Write a story'
+        %li
+          -#=link_to "<span class='glyphicon glyphicon-shopping-cart'></span>".html_safe, '#', title: 'COMING SOON'
+
+        %li=link_to user_image(current_user, size: 27, class: 'img-circle'), profile_url(current_user.url_code), style: 'margin-top: -3px;'
+        %li.dropdown
+          %a{href: '#', class: 'dropdown-toggle', data: {toggle: 'dropdown'}}
+            =current_user.first_name
+            %span.caret
+            -#.glyphicon.glyphicon-chevron-down
+          %ul.dropdown-menu
+            -if current_user.contributor? || current_user.curator?
+              %li=link_to 'Dashboard', welcome_contributor_url
+            -#if current_user.curator?
+              %li=link_to 'Curators Home', welcome_curator_url
+            -if current_user.try(:admin?)
+              %li.divider
+              %li=link_to 'Invites', user_invites_url
+              %li=link_to 'Pre-registrations', pre_registrations_url
+              %li=link_to 'Admin Dashboard', welcome_admin_url
+              %li=link_to 'Users', users_url
+              %li.divider
+            %li=link_to 'Settings', my_account_url
+            %li=link_to 'Public profile', profile_url(current_user.url_code)
+            %li=link_to 'Sign out', logout_url
+
+      -else
+        %li=link_to 'Sign in', '/auth/facebook', id: 'fb_sign_in', target: '_top'
+        -#%li=link_to 'Sign up', sign_up_url
+        -#%li=link_to 'Sign in', sign_in_url

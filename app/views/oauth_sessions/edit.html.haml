@@ -1,0 +1,102 @@
+.row
+  .col-md-8.col-md-offset-2
+    .page-header
+      %h1 You're almost there!
+      %p.text-muted
+        Your
+        =@auth.provider.titleize
+        privacy settings have prevented your email address from being shared
+        with us, but we need it to identify your Bourbon account.
+.row
+  .col-md-8.col-md-offset-2
+
+    %ul.nav.nav-tabs{role: 'tablist'}
+      %li{class: params[:source].to_s == 'sign_up' ? 'active' : ''}
+        %a{href: '#sign-up', role: 'tab', data: {toggle: 'tab'}} First time on Bourbon
+      %li{class: params[:source].to_s == 'sign_up' ? '' : 'active'}
+        %a{href: '#return', role: 'tab', data: {toggle: 'tab'}} Already signed up for Bourbon
+
+    .tab-content
+      .tab-pane.fade#sign-up{class: params[:source].to_s == 'sign_up' ? 'in active' : ''}
+        .well.well-sm
+          Please complete the following details, and we will finalise your new
+          Bourbon account and link it with your
+          =@auth.provider.titleize
+          account.
+
+        =form_for(@auth, url: {controller: 'oauth_sessions', action: :update}, html: {class: 'form-horizontal', role: 'form'}) do |f|
+          =render partial: 'layouts/error_messages', locals: {thing: @auth}
+          =f.hidden_field :id, value: @auth.id
+
+          .form-group
+            =f.label :email, class: 'control-label col-sm-4'
+            .col-md-8
+              =f.email_field :email, class: 'form-control', required: true
+          .form-group
+            =label_tag :password, 'Bourbon password', class: 'control-label col-sm-4'
+            .col-md-8
+              =password_field_tag :password, nil, class: 'form-control', required: true
+          .form-group
+            =label_tag :country_id, nil, class: 'control-label col-sm-4'
+            .col-md-8
+              =select_tag :country_id, options_from_collection_for_select(@countries, :id, :name), class: 'form-control'
+          .form-group
+            =label_tag :time_zone, nil, class: 'control-label col-sm-4'
+            .col-md-8
+              =select_tag :time_zone, time_zone_options_for_select, class: 'form-control'
+          .form-group
+            .col-md-8.col-md-offset-4
+              =f.submit 'Save', class: 'btn btn-success'
+
+
+      .tab-pane.fade#return{class: params[:source].to_s == 'sign_up' ? '' : 'in active'}
+        .well.well-sm
+          Please insert your Bourbon email address and password, and we will link your
+          =@auth.provider.titleize
+          account with your Bourbon account for you.
+
+        =form_for(@auth, url: {controller: 'oauth_sessions', action: :update}, html: {class: 'form-horizontal', role: 'form'}) do |g|
+          =render partial: 'layouts/error_messages', locals: {thing: @auth}
+          =g.hidden_field :id, value: @auth.id
+
+          .form-group
+            =g.label :email, class: 'control-label col-sm-4'
+            .col-md-8
+              =g.email_field :email, class: 'form-control', required: true
+          .form-group
+            =label_tag :password, 'Bourbon password', class: 'control-label col-sm-4'
+            .col-md-8
+              =password_field_tag :password, nil, class: 'form-control', required: true
+
+          .hidden-stuff.hidden
+            .well.well-sm
+              We didn't recognise that email / password combination.
+              If you are an existing Bourbon user, please try again.
+              If you are new to Bourbon, please choose the "First time on Bourbon" tab above.
+
+          .form-group
+            .col-md-8.col-md-offset-4
+              =g.submit 'Save', class: 'btn btn-success', onclick: 'checkEmail(); return false;'
+
+:javascript
+
+  function checkEmail() {
+
+    $.ajax({
+      dataType: "json",
+      method: "GET",
+      url: '/oauth_sessions/email_exists',
+      data: {
+        id: $('#omniauth_authorization_id').val(),
+        email: $('#omniauth_authorization_email').val(),
+        password: $('#password').val()
+      },
+      success: function(e) {
+        if (e.answer == true) {
+          $('#omniauth_authorization_id').closest('form').submit();
+        } else {
+          $('.hidden-stuff').removeClass('hidden');
+        }
+      }
+    });
+  }

@@ -1,0 +1,20 @@
+-# include this file into a view file using the following:
+  =render partial: 'user_content_links/show', locals: {the_link: @user_content_link}
+-if the_link.profile
+  %p
+    %span.text-muted Profile of
+    =link_to the_link.profile.full_name, profile_url(the_link.profile.url_code)
+-elsif the_link.bourbon_article
+  %p
+    %span.text-muted Article
+    =link_to the_link.bourbon_article.article_title, story_url(the_link.bourbon_article.clickable_title), title: the_link.bourbon_article.article_subtitle
+    %br/
+    %span.text-muted by
+    =link_to the_link.bourbon_article.contributor.full_name, profile_url(the_link.bourbon_article.contributor.url_code)
+-elsif the_link.profile_question_answer
+  %p
+    %span.text-muted Q:
+    =the_link.profile_question_answer.question.instance_variable_name
+    %br/
+    %span.text-muted A:
+    =the_link.profile_question_answer.the_response

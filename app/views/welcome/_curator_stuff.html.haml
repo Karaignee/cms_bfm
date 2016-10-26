@@ -1,0 +1,41 @@
+-#.row
+  .btn-group
+    .btn-group
+      %button.btn.btn-default.dropdown-toggle{type: 'button', data: {toggle: 'dropdown'}}
+        Manage Bourbon Media and Content
+        %span.caret
+      %ul.dropdown-menu{role: 'menu'}
+        %li
+          =link_to 'Media Uploads', media_uploads_url
+        %li
+          =link_to 'Profile Questions', profile_questions_url
+        %li
+          =link_to 'Question Categories', profile_question_categories_url
+
+
+.row
+  .col-sm-12
+    %h2 Curation Tools
+    %ul.dashboard-tabs
+      %li.active
+        %a{data: {toggle:'tab'}, href: '#curator_articles'} Articles
+      %li
+        %a{data: {toggle:'tab'}, href: '#curator_comments'} Comments
+      %li
+        %a{data: {toggle:'tab'}, href: '#curator_complaints'} Complaints
+      %li
+        %a{data: {toggle:'tab'}, href: '#curator_answers'} Q&A Answers
+      %li
+        %a{data: {toggle:'tab'}, href: '#curator_media_uploads'} Media Uploads
+
+    .tab-content
+      .tab-pane.active.fade.in#curator_articles
+        =render partial: 'bourbon_articles/index', locals: {the_articles: curated_articles.sent_for_review.all_in_order}
+      .tab-pane.fade#curator_comments
+        %p.text-muted Coming soon
+      .tab-pane.fade#curator_complaints
+        %p.text-muted Coming soon
+      .tab-pane.fade#curator_answers
+        %p.text-muted Coming soon
+      .tab-pane.fade#curator_media_uploads
+        %p.text-muted Coming soon

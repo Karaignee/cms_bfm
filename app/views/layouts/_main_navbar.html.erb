@@ -1,0 +1,374 @@
+<!-- <nav class="navbar navbar-inverse navbar-default" role="navigation"></nav> -->
+
+    
+
+    <!--Navigation -->
+
+    <nav class="navbar navbar-default navbar-custom navbar-fixed-top" role="navigation">
+
+        <div class="container-fluid">
+
+            <!-- Brand and toggle get grouped for better mobile display -->
+
+            <div class="navbar-header page-scroll">
+
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+
+                    <span class="sr-only">Toggle navigation</span>
+
+                    <span class="icon-bar"></span>
+
+                    <span class="icon-bar"></span>
+
+                    <span class="icon-bar"></span>
+
+                </button>
+
+                
+
+                <a class="navbar-brand" <%= link_to '', root_url %></a>
+
+             </div>   
+
+             
+
+             <!-- navbar inception -->
+
+	            <% if content_for?(:jumbotron) %>
+
+	            
+
+	  				<% if @bourbon_article && @bourbon_article.try(:image).try(:make_text_bright) %>
+
+	  					<style>
+
+	  						a.navbar-brand {
+
+							    background-image:url("/assets/Single_B-white.png");
+
+							}
+
+							
+
+							a.navbar-brand.scrolled {
+
+							    background-image:url("/assets/Single_B-black.png");
+
+							}
+
+	  					</style>
+
+	  				<% else %>
+
+	  					<style>
+
+	  						a.navbar-brand {
+
+							    background-image:url("/assets/Single_B-black.png");
+
+							}
+
+							a.navbar-brand.scrolled {
+
+							    background-image:url("/assets/Single_B-black.png");
+
+							}
+
+							.navbar-custom .nav li a{
+
+    						    color: #404040;
+
+							}
+
+							.navbar-custom .nav li a:hover, .navbar-custom.is-fixed .nav li a:focus{
+
+    						    color: #696969 !important;
+
+							}
+							
+							.navbar-custom .nav li a:hover, .navbar-custom .nav li a:focus {
+    							color: #696969 !important;
+							}
+
+							
+
+	  					</style>
+
+	  				<% end %>
+
+	  				
+
+				<% elsif @special_body_class == 'bfm-homepage' || @special_body_class == 'bfm-sign-in' || @special_body_class == 'bfm-sign-up' || @special_body_class == 'video-show'%>
+
+	  					<style>
+
+	  						a.navbar-brand {
+
+							    background-image:url("/assets/Single_B-white.png");
+
+							}
+
+							
+
+							a.navbar-brand.scrolled {
+
+							    background-image:url("/assets/Single_B-black.png");
+
+							}
+
+	  					</style>  
+
+				<% else %>
+
+					<style>
+
+	  					a.navbar-brand {
+
+						    background-image:url("/assets/Single_B-black.png");
+
+						}
+
+						a.navbar-brand.scrolled {
+
+						    background-image:url("/assets/Single_B-black.png");
+
+						}
+
+						.navbar-custom .nav li a{
+
+    					    color: #404040;
+
+						}
+
+						.navbar-custom .nav li a:hover, .navbar-custom.is-fixed .nav li a:focus{
+
+    					    color: #696969;
+
+						}
+
+	 				</style>
+
+			<% end %>
+
+			
+
+           
+
+
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+
+                <ul class="nav navbar-nav navbar-right">
+                  <li>
+                    <%= link_to 'GEAR', gear_pages_url, class: 'btn btn-success' %>
+
+                  </li>
+
+                    <li>
+                        <%= link_to 'STORIES', stories_url, class: 'btn btn-success' %>
+
+                    </li>
+
+                  <li>
+                    <%= link_to 'VIDEOS', video_uploads_url, class: 'btn btn-success' %>
+
+                  </li>
+
+
+
+
+
+				  <% if current_user %>
+
+				    <li>
+
+				      <% if current_user.contributor? %>
+
+				        <%= link_to 'Write a story', new_story_url, class: 'btn btn-success' %>
+
+				      	<% end %>
+
+				      <% #=link_to "<span class='glyphicon glyphicon-pencil'></span>".html_safe, new_story_url, title: 'Write a story' %>
+
+				    </li>
+
+				    <li>
+
+                      <%= link_to 'Upload a video', new_video_upload_url, class: 'btn btn-success' %>
+
+				    </li>
+
+				    <li>
+
+				      <%= link_to user_image(current_user, size: 45, class: 'img-circle'), profile_url(current_user.url_code), style: 'margin-top: -5px;padding-top:0px;top:13px;' %>
+
+				    </li>
+
+				    <li class="dropdown">
+
+				        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+
+				            <%= current_user.first_name %>
+
+				            <span class="caret"></span>
+
+				            <% #.glyphicon.glyphicon-chevron-down %>
+
+				        </a>
+
+				        <ul class="dropdown-menu">
+
+				            <% if current_user.contributor? || current_user.curator? %>
+
+				                <li>
+
+				                    <%= link_to 'Dashboard', welcome_contributor_url %>
+
+				                </li>
+
+				            <% end %>
+
+				        	<% #if current_user.curator? %>
+
+				            <!--<li>
+
+				                    <%#= link_to 'Curators Home', welcome_curator_url %>
+
+				                </li> -->
+
+				            <% #end %>
+
+				            <% if current_user.try(:admin?) %>
+
+				                <li class="divider">
+
+				                </li>
+
+				                <li>
+
+				                    <%= link_to 'Invites', user_invites_url %>
+
+				                </li>
+
+				                <li>
+
+				                    <%= link_to 'Pre-registrations', pre_registrations_url %>
+
+				                </li>
+
+				                <li>
+
+				                    <%= link_to 'Admin Dashboard', welcome_admin_url %>
+
+				                </li>
+
+				                <li>
+
+				                    <%= link_to 'Users', users_url %>
+
+				                </li>
+
+				                <li class="divider"></li>
+
+				            <% end %>
+
+				                <li>
+
+				                    <%= link_to 'Settings', my_account_url %>
+
+				                </li>
+
+				                <li>
+
+				                    <%= link_to 'Public profile', profile_url(current_user.url_code) %>
+
+				                </li>
+
+				                <li>
+
+				                    <%= link_to 'Sign out', logout_url %>
+
+				                </li>
+
+				        </ul> <!-- end dropdown ul -->
+
+				    </li>
+
+				  
+
+				<% else %>
+				<li>
+				<i class="fa fa-facebook fa-nav-fb">
+					<%= link_to 'facebook sign in', '/auth/facebook', id: 'fb_sign_in', target: '_top', class: 'btn btn-block btn-social btn-facebook' %> 
+				</i>
+				</li>
+
+			
+
+<!-- 			   <li>
+
+				        <%=link_to 'Sign up', sign_up_url %>
+
+				    </li>
+
+				    <li>
+
+				        <%=link_to 'Sign in', sign_in_url %>
+
+				    </li>
+ -->
+				<% end %>
+
+               </ul> <!-- end nav navbar-nav navbar-right ul -->
+
+            </div>
+
+             <!-- /.navbar-collapse -->
+
+        </div>
+
+        <!-- /.container -->
+
+    </nav>
+
+    
+
+<script>
+
+
+
+// ADD SLIDEDOWN ANIMATION TO DROPDOWN //
+
+  $('.dropdown').on('show.bs.dropdown', function(e){
+
+    $(this).find('.dropdown-menu').first().stop(true, true).slideDown();
+
+  });
+
+
+
+// ADD SLIDEUP ANIMATION TO DROPDOWN //
+
+  $('.dropdown').on('hide.bs.dropdown', function(e){
+
+    $(this).find('.dropdown-menu').first().stop(true, true).slideUp();
+
+  });
+
+
+// add current class to navigation //
+  
+
+
+jQuery(function() {
+  jQuery('.navbar-custom .nav li a').each(function() {
+    if (jQuery(this).attr('href')  ===  window.location.href) {
+      jQuery(this).addClass('current');
+    }
+  });
+});  
+
+
+</script>

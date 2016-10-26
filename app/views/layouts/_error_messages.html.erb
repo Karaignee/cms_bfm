@@ -1,0 +1,19 @@
+<% if thing.errors.any? %>
+  <div class="container" style="max-width:520px !important; padding-left:0px !important;">
+    <div class="panel panel-danger">
+      <div class="panel-heading">
+        <%= pluralize(thing.errors.count, 'error') %>
+        <%= message || 'prevented you from saving:' %>
+      </div>
+      <div class="panel-body">
+        <ul>
+          <% thing.errors.full_messages.each do |msg| %>
+            <li>
+              <%= msg %>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  </div>
+<% end %>

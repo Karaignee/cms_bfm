@@ -1,0 +1,8 @@
+.row
+  .col-md-12
+    .page-header
+      %h1 New <%= singular_table_name.gsub('_',' ').titleize %>
+=render partial: 'form'
+.row
+  .col-md-12
+    %p=link_to 'Back', <%= table_name %>_url

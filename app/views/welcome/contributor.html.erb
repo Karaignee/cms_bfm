@@ -1,0 +1,86 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="page-header">
+      <h1>Dashboard</h1>
+    </div>
+  </div>
+</div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="page-header">
+          <h1>Articles</h1>
+        </div>
+      </div>
+    </div>
+<div class="row">
+  <div class="col-md-12">
+    <ul class="dashboard-tabs">
+      <li class="active">
+        <a data-toggle="tab" href="#wip_articles">Work in progress</a>
+      </li>
+      <li>
+        <a data-toggle="tab" href="#being_reviewed"> Being reviewed</a>
+      </li>
+      <li>
+        <a data-toggle="tab" href="#published"> Published</a>
+      </li>
+    </ul>
+    <div class="tab-content">
+      <div class="tab-pane active fade in" id="wip_articles">
+        <%= render partial: 'bourbon_articles/index', locals: {the_articles: @bourbon_articles.saved_as_draft.all_in_order} %>
+      </div>
+      <div class="tab-pane fade" id="being_reviewed">
+        <%= render partial: 'bourbon_articles/index', locals: {the_articles: @bourbon_articles.sent_for_review.all_in_order} %>
+      </div>
+      <div class="tab-pane fade" id="published">
+        <%= render partial: 'bourbon_articles/index', locals: {the_articles: @bourbon_articles.published.all_in_order} %>
+      </div>
+    </div>
+  </div>
+</div>
+<% if current_user.admin? %>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="page-header">
+          <h1>Videos</h1>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-10 col-sm-10 col-md-10 col-lg-9 col-centered-packery">
+          <div class="row">
+            <table border="1" style="width:100%">
+          <thead>
+          <tr>
+          <th>Title</th>
+          <th>Created</th>
+          <th></th>
+          <th></th>
+          </tr>
+          </thead>
+          <tbody>
+          <% @videos.each do |video| %>
+          <tr>
+            <th><%= video.title %></th>
+            <th><%= video.created_at.to_s(:standard) %></th>
+            <th><%= link_to 'Show', video_upload_path(video), class: 'btn btn-default dashboard-btn' %></th>
+            <th><%= link_to 'Edit', edit_video_upload_path(video), class: 'btn btn-default dashboard-btn' %></th>
+            <th><%= link_to 'Delete', video, method: :delete, class: 'btn btn-default dashboard-btn' %></th>
+          </tr>
+          <% end %>
+          </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+<% end %>
+<!-- commented out section as only article functionality works and is duplicated above -->
+ <%# if current_user.curator? %>
+  <!-- <hr/> -->
+  <%#= render partial: 'welcome/curator_stuff', locals: {curated_articles: @curated_articles} %>
+<%# end %>

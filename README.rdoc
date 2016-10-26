@@ -1,0 +1,16 @@
+== GETTING STARTED 18.11.14
+clone repo
+cd to repo
+rake db:migrate && rake db:migrate RAILS_ENV=test
+bundle install
+rake db:seed
+
+rails s
+go to localhost3000/sign_in
+**DO NOT CLICK THE SIGN IN BUTTON IN NAVIGATION
+go to seeds.rb and use one of the user log in details 
+
+git checkout -b new_branch_name
+work in that branch and 
+git push origin new_branch_name:new_branch_name
+This will push the new-branch-name stuff from the local branch to a branch of the same name up on origin; origin is "github".

@@ -1,0 +1,8 @@
+<h1>Welcome to Bourbon.FM</h1>
+<p>Hi <%= @user.first_name.titleize %>,</p>
+<p>Thanks so much for registering. To activate your account, follow this link:</p>
+<p><%= link_to @server_name + 'activate/' + @user.activation_code, @server_name + 'activate/' + @user.activation_code %></p>
+<p>If you need help, get in touch.</p>
+<p>Rock on,</p>
+<br/>
+<p>Tom</p>
